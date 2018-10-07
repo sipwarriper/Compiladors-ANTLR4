@@ -15,13 +15,13 @@ public class gramBaseListener implements gramListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPrule(gramParser.PruleContext ctx) { }
+	@Override public void enterInici(gramParser.IniciContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPrule(gramParser.PruleContext ctx) { }
+	@Override public void exitInici(gramParser.IniciContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

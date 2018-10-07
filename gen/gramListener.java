@@ -7,13 +7,13 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface gramListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link gramParser#prule}.
+	 * Enter a parse tree produced by {@link gramParser#inici}.
 	 * @param ctx the parse tree
 	 */
-	void enterPrule(gramParser.PruleContext ctx);
+	void enterInici(gramParser.IniciContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link gramParser#prule}.
+	 * Exit a parse tree produced by {@link gramParser#inici}.
 	 * @param ctx the parse tree
 	 */
-	void exitPrule(gramParser.PruleContext ctx);
+	void exitInici(gramParser.IniciContext ctx);
 }
