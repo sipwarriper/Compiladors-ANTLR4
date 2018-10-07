@@ -17,4 +17,11 @@ public class gramBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements g
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitInici(gramParser.IniciContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitTestingRule(gramParser.TestingRuleContext ctx) { return visitChildren(ctx); }
 }

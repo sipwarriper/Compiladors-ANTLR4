@@ -23,9 +23,9 @@ public class gramParser extends Parser {
 		TK_PC_FINS=19, TK_PC_FER=20, TK_PC_FPER=21, TK_PC_MENTRE=22, TK_PC_FMENTRE=23, 
 		TK_CONST_CHAR=24;
 	public static final int
-		RULE_inici = 0;
+		RULE_inici = 0, RULE_testingRule = 1;
 	public static final String[] ruleNames = {
-		"inici"
+		"inici", "testingRule"
 	};
 
 	private static final String[] _LITERAL_NAMES = {
@@ -121,13 +121,13 @@ public class gramParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(3); 
+			setState(5); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(2);
+				setState(4);
 				_la = _input.LA(1);
 				if ( _la <= 0 || (_la==EOF) ) {
 				_errHandler.recoverInline(this);
@@ -139,7 +139,7 @@ public class gramParser extends Parser {
 				}
 				}
 				}
-				setState(5); 
+				setState(7); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TK_WS) | (1L << TK_PC_PROGRAMA) | (1L << TK_PC_FPROGRAMA) | (1L << TK_PC_ACCIO) | (1L << TK_PC_FACCIO) | (1L << TK_PC_FUNCIO) | (1L << TK_PC_FFUNCIO) | (1L << TK_PC_CONSTANTS) | (1L << TK_PC_FCONSTANTS) | (1L << TK_PC_VARIABLES) | (1L << TK_PC_FVARIABLES) | (1L << TK_PC_TIPUS) | (1L << TK_PC_FTIPUS) | (1L << TK_PC_SI) | (1L << TK_PC_ALTRAMENT) | (1L << TK_PC_FSI) | (1L << TK_PC_PER) | (1L << TK_PC_DE) | (1L << TK_PC_FINS) | (1L << TK_PC_FER) | (1L << TK_PC_FPER) | (1L << TK_PC_MENTRE) | (1L << TK_PC_FMENTRE) | (1L << TK_CONST_CHAR))) != 0) );
@@ -156,10 +156,74 @@ public class gramParser extends Parser {
 		return _localctx;
 	}
 
+	public static class TestingRuleContext extends ParserRuleContext {
+		public TerminalNode EOF() { return getToken(gramParser.EOF, 0); }
+		public List<TerminalNode> TK_CONST_CHAR() { return getTokens(gramParser.TK_CONST_CHAR); }
+		public TerminalNode TK_CONST_CHAR(int i) {
+			return getToken(gramParser.TK_CONST_CHAR, i);
+		}
+		public TestingRuleContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_testingRule; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof gramListener ) ((gramListener)listener).enterTestingRule(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof gramListener ) ((gramListener)listener).exitTestingRule(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof gramVisitor ) return ((gramVisitor<? extends T>)visitor).visitTestingRule(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final TestingRuleContext testingRule() throws RecognitionException {
+		TestingRuleContext _localctx = new TestingRuleContext(_ctx, getState());
+		enterRule(_localctx, 2, RULE_testingRule);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(10); 
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			do {
+				{
+				{
+				setState(9);
+				match(TK_CONST_CHAR);
+				}
+				}
+				setState(12); 
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			} while ( _la==TK_CONST_CHAR );
+			setState(14);
+			match(EOF);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\32\n\4\2\t\2\3\2"+
-		"\6\2\6\n\2\r\2\16\2\7\3\2\2\2\3\2\2\3\2\3\2\t\2\5\3\2\2\2\4\6\n\2\2\2"+
-		"\5\4\3\2\2\2\6\7\3\2\2\2\7\5\3\2\2\2\7\b\3\2\2\2\b\3\3\2\2\2\3\7";
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\32\23\4\2\t\2\4\3"+
+		"\t\3\3\2\6\2\b\n\2\r\2\16\2\t\3\3\6\3\r\n\3\r\3\16\3\16\3\3\3\3\3\3\2"+
+		"\2\4\2\4\2\3\2\3\2\22\2\7\3\2\2\2\4\f\3\2\2\2\6\b\n\2\2\2\7\6\3\2\2\2"+
+		"\b\t\3\2\2\2\t\7\3\2\2\2\t\n\3\2\2\2\n\3\3\2\2\2\13\r\7\32\2\2\f\13\3"+
+		"\2\2\2\r\16\3\2\2\2\16\f\3\2\2\2\16\17\3\2\2\2\17\20\3\2\2\2\20\21\7\2"+
+		"\2\3\21\5\3\2\2\2\4\t\16";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

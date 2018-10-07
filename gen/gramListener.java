@@ -16,4 +16,14 @@ public interface gramListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitInici(gramParser.IniciContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link gramParser#testingRule}.
+	 * @param ctx the parse tree
+	 */
+	void enterTestingRule(gramParser.TestingRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link gramParser#testingRule}.
+	 * @param ctx the parse tree
+	 */
+	void exitTestingRule(gramParser.TestingRuleContext ctx);
 }

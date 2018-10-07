@@ -5,7 +5,7 @@ inici: (~EOF)+;
 
 
 //Regles lexiques
-TK_WS: ( ' ' | '\ t' | '\n' | '\ r' ) -> skip;
+TK_WS: ( ' ' | '\t' | '\n' | '\r' ) -> skip;
 
 //---------PARAULES CLAU-----------------------------
 TK_PC_PROGRAMA: 'programa';
@@ -49,5 +49,11 @@ fragment CAPLETTER: 'A'..'Z';
 
 
 //--------CONSTANTS-----------------------------------------
-TK_CONST_CHAR: '\'' (' ' .. '~' ) '\'';
+TK_CONST_CHAR: '\'' (' ' .. '~' ) | '\\' '\'' '\'';
+
+TK_CONST_REAL: '-'? (('0.' | DIGIT* '.') ('0' | DIGIT)+) ('E' '-'? DIGIT ('0' | DIGIT)*)?;
+
+
+
+testingRule: TK_CONST_REAL+? EOF;
 

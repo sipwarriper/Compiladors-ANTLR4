@@ -22,6 +22,18 @@ public class gramBaseListener implements gramListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitInici(gramParser.IniciContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTestingRule(gramParser.TestingRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTestingRule(gramParser.TestingRuleContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

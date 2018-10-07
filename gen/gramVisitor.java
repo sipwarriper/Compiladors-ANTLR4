@@ -15,4 +15,10 @@ public interface gramVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitInici(gramParser.IniciContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link gramParser#testingRule}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTestingRule(gramParser.TestingRuleContext ctx);
 }
