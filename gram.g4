@@ -108,6 +108,11 @@ TK_COMMENTS: '//' (.)*? ('\n' | EOF);
 
 TK_MULTILINE_COMMENTS: '/*' (.)*? '*/';
 
+//----------separadors
+
+TK_SEP_COMMA: ',';
+TK_SEP_SEMICOLON: ';';
+
 
 testingRule: TK_MULTILINE_COMMENTS+? EOF;
 

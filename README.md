@@ -1,5 +1,8 @@
 # Compiladors-ANTLR4
 
+## REPASSAR
+* operadors
+* separadors
 
 ## Done
 * paraules claus
@@ -25,8 +28,10 @@
   * acces a tuples (.)
   * assignacio (:=)
 * comentaris
+* separadors
+
 
 ## TODO LEXIC
 
-* separadors
 * identificadors
+
