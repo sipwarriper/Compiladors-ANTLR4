@@ -20,11 +20,15 @@ public class gramParser extends Parser {
 		TK_PC_FUNCIO=6, TK_PC_FFUNCIO=7, TK_PC_RETURN=8, TK_PC_PARAM_IN=9, TK_PC_PARAM_IO=10, 
 		TK_PC_CONSTANTS=11, TK_PC_FCONSTANTS=12, TK_PC_VARIABLES=13, TK_PC_FVARIABLES=14, 
 		TK_PC_TIPUS=15, TK_PC_FTIPUS=16, TK_PC_TUPLA=17, TK_PC_FTUPLA=18, TK_PC_VECTOR=19, 
-		TK_PC_MIDA=20, TK_PC_INICI=21, TK_PC_SI=22, TK_PC_ALTRAMENT=23, TK_PC_FSI=24, 
-		TK_PC_PER=25, TK_PC_DE=26, TK_PC_FINS=27, TK_PC_FER=28, TK_PC_FPER=29, 
-		TK_PC_MENTRE=30, TK_PC_FMENTRE=31, TK_CONST_CHAR=32, TK_CONST_REAL=33, 
-		TK_CONST_BOOL=34, TK_CONST_INT=35, TK_OP_SUMA=36, TK_OP_RESTA=37, TK_OP_MULT=38, 
-		TK_OP_REALDIV=39, TK_OP_INTDIV=40;
+		TK_PC_MIDA=20, TK_PC_INICI=21, TK_PC_SI=22, TK_PC_LLAVORS=23, TK_PC_ALTRAMENT=24, 
+		TK_PC_FSI=25, TK_PC_PER=26, TK_PC_DE=27, TK_PC_FINS=28, TK_PC_FER=29, 
+		TK_PC_FPER=30, TK_PC_MENTRE=31, TK_PC_FMENTRE=32, TK_CONST_CHAR=33, TK_CONST_REAL=34, 
+		TK_CONST_BOOL=35, TK_CONST_INT=36, TK_OP_SUMA=37, TK_OP_RESTA=38, TK_OP_MULT=39, 
+		TK_OP_REALDIV=40, TK_OP_INTDIV=41, TK_OP_MOD=42, TK_OP_EQ=43, TK_OP_DIFF=44, 
+		TK_OP_GT=45, TK_OP_LT=46, TK_OP_LOET=47, TK_OP_GOET=48, TK_OP_NEG=49, 
+		TK_OP_AND=50, TK_OP_O=51, TK_OP_IF_THEN_ELSE_CONDITION=52, TK_OP_IF_THEN_ELSE_ALTENRATIVE=53, 
+		TK_OP_VECTOR_OPEN=54, TK_OP_VECTOR_CLOSE=55, TK_OP_TUPLE=56, TK_OP_ASSIGN=57, 
+		TK_COMMENTS=58;
 	public static final int
 		RULE_inici = 0, RULE_testingRule = 1;
 	public static final String[] ruleNames = {
@@ -35,19 +39,25 @@ public class gramParser extends Parser {
 		null, null, "'programa'", "'fprograma'", "'accio'", "'faccio'", "'funcio'", 
 		"'ffuncio'", "'retorna'", "'ent'", "'entsor'", "'constants'", "'fconstants'", 
 		"'variables'", "'fvariables'", "'tipus'", "'ftipus'", "'tupla'", "'ftupla'", 
-		"'vector'", "'mida'", "'inici'", "'si'", "'altrament'", "'fsi'", "'per'", 
-		"'de'", "'fins'", "'fer'", "'fper'", "'mentre'", "'fmentre'", null, null, 
-		null, null, "'+'", "'-'", "'*'", "'/'", "'\\'"
+		"'vector'", "'mida'", "'inici'", "'si'", "'llavors'", "'altrament'", "'fsi'", 
+		"'per'", "'de'", "'fins'", "'fer'", "'fper'", "'mentre'", "'fmentre'", 
+		null, null, null, null, "'+'", "'-'", "'*'", "'/'", "'\\'", "'%'", "'=='", 
+		"'!='", "'>'", "'<'", "'<='", "'>='", "'no'", "'&'", "'|'", "'?'", "':'", 
+		"'['", "']'", "'.'", "':='"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
 		null, "TK_WS", "TK_PC_PROGRAMA", "TK_PC_FPROGRAMA", "TK_PC_ACCIO", "TK_PC_FACCIO", 
 		"TK_PC_FUNCIO", "TK_PC_FFUNCIO", "TK_PC_RETURN", "TK_PC_PARAM_IN", "TK_PC_PARAM_IO", 
 		"TK_PC_CONSTANTS", "TK_PC_FCONSTANTS", "TK_PC_VARIABLES", "TK_PC_FVARIABLES", 
 		"TK_PC_TIPUS", "TK_PC_FTIPUS", "TK_PC_TUPLA", "TK_PC_FTUPLA", "TK_PC_VECTOR", 
-		"TK_PC_MIDA", "TK_PC_INICI", "TK_PC_SI", "TK_PC_ALTRAMENT", "TK_PC_FSI", 
-		"TK_PC_PER", "TK_PC_DE", "TK_PC_FINS", "TK_PC_FER", "TK_PC_FPER", "TK_PC_MENTRE", 
-		"TK_PC_FMENTRE", "TK_CONST_CHAR", "TK_CONST_REAL", "TK_CONST_BOOL", "TK_CONST_INT", 
-		"TK_OP_SUMA", "TK_OP_RESTA", "TK_OP_MULT", "TK_OP_REALDIV", "TK_OP_INTDIV"
+		"TK_PC_MIDA", "TK_PC_INICI", "TK_PC_SI", "TK_PC_LLAVORS", "TK_PC_ALTRAMENT", 
+		"TK_PC_FSI", "TK_PC_PER", "TK_PC_DE", "TK_PC_FINS", "TK_PC_FER", "TK_PC_FPER", 
+		"TK_PC_MENTRE", "TK_PC_FMENTRE", "TK_CONST_CHAR", "TK_CONST_REAL", "TK_CONST_BOOL", 
+		"TK_CONST_INT", "TK_OP_SUMA", "TK_OP_RESTA", "TK_OP_MULT", "TK_OP_REALDIV", 
+		"TK_OP_INTDIV", "TK_OP_MOD", "TK_OP_EQ", "TK_OP_DIFF", "TK_OP_GT", "TK_OP_LT", 
+		"TK_OP_LOET", "TK_OP_GOET", "TK_OP_NEG", "TK_OP_AND", "TK_OP_O", "TK_OP_IF_THEN_ELSE_CONDITION", 
+		"TK_OP_IF_THEN_ELSE_ALTENRATIVE", "TK_OP_VECTOR_OPEN", "TK_OP_VECTOR_CLOSE", 
+		"TK_OP_TUPLE", "TK_OP_ASSIGN", "TK_COMMENTS"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -150,7 +160,7 @@ public class gramParser extends Parser {
 				setState(7); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TK_WS) | (1L << TK_PC_PROGRAMA) | (1L << TK_PC_FPROGRAMA) | (1L << TK_PC_ACCIO) | (1L << TK_PC_FACCIO) | (1L << TK_PC_FUNCIO) | (1L << TK_PC_FFUNCIO) | (1L << TK_PC_RETURN) | (1L << TK_PC_PARAM_IN) | (1L << TK_PC_PARAM_IO) | (1L << TK_PC_CONSTANTS) | (1L << TK_PC_FCONSTANTS) | (1L << TK_PC_VARIABLES) | (1L << TK_PC_FVARIABLES) | (1L << TK_PC_TIPUS) | (1L << TK_PC_FTIPUS) | (1L << TK_PC_TUPLA) | (1L << TK_PC_FTUPLA) | (1L << TK_PC_VECTOR) | (1L << TK_PC_MIDA) | (1L << TK_PC_INICI) | (1L << TK_PC_SI) | (1L << TK_PC_ALTRAMENT) | (1L << TK_PC_FSI) | (1L << TK_PC_PER) | (1L << TK_PC_DE) | (1L << TK_PC_FINS) | (1L << TK_PC_FER) | (1L << TK_PC_FPER) | (1L << TK_PC_MENTRE) | (1L << TK_PC_FMENTRE) | (1L << TK_CONST_CHAR) | (1L << TK_CONST_REAL) | (1L << TK_CONST_BOOL) | (1L << TK_CONST_INT) | (1L << TK_OP_SUMA) | (1L << TK_OP_RESTA) | (1L << TK_OP_MULT) | (1L << TK_OP_REALDIV) | (1L << TK_OP_INTDIV))) != 0) );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TK_WS) | (1L << TK_PC_PROGRAMA) | (1L << TK_PC_FPROGRAMA) | (1L << TK_PC_ACCIO) | (1L << TK_PC_FACCIO) | (1L << TK_PC_FUNCIO) | (1L << TK_PC_FFUNCIO) | (1L << TK_PC_RETURN) | (1L << TK_PC_PARAM_IN) | (1L << TK_PC_PARAM_IO) | (1L << TK_PC_CONSTANTS) | (1L << TK_PC_FCONSTANTS) | (1L << TK_PC_VARIABLES) | (1L << TK_PC_FVARIABLES) | (1L << TK_PC_TIPUS) | (1L << TK_PC_FTIPUS) | (1L << TK_PC_TUPLA) | (1L << TK_PC_FTUPLA) | (1L << TK_PC_VECTOR) | (1L << TK_PC_MIDA) | (1L << TK_PC_INICI) | (1L << TK_PC_SI) | (1L << TK_PC_LLAVORS) | (1L << TK_PC_ALTRAMENT) | (1L << TK_PC_FSI) | (1L << TK_PC_PER) | (1L << TK_PC_DE) | (1L << TK_PC_FINS) | (1L << TK_PC_FER) | (1L << TK_PC_FPER) | (1L << TK_PC_MENTRE) | (1L << TK_PC_FMENTRE) | (1L << TK_CONST_CHAR) | (1L << TK_CONST_REAL) | (1L << TK_CONST_BOOL) | (1L << TK_CONST_INT) | (1L << TK_OP_SUMA) | (1L << TK_OP_RESTA) | (1L << TK_OP_MULT) | (1L << TK_OP_REALDIV) | (1L << TK_OP_INTDIV) | (1L << TK_OP_MOD) | (1L << TK_OP_EQ) | (1L << TK_OP_DIFF) | (1L << TK_OP_GT) | (1L << TK_OP_LT) | (1L << TK_OP_LOET) | (1L << TK_OP_GOET) | (1L << TK_OP_NEG) | (1L << TK_OP_AND) | (1L << TK_OP_O) | (1L << TK_OP_IF_THEN_ELSE_CONDITION) | (1L << TK_OP_IF_THEN_ELSE_ALTENRATIVE) | (1L << TK_OP_VECTOR_OPEN) | (1L << TK_OP_VECTOR_CLOSE) | (1L << TK_OP_TUPLE) | (1L << TK_OP_ASSIGN) | (1L << TK_COMMENTS))) != 0) );
 			}
 		}
 		catch (RecognitionException re) {
@@ -166,9 +176,9 @@ public class gramParser extends Parser {
 
 	public static class TestingRuleContext extends ParserRuleContext {
 		public TerminalNode EOF() { return getToken(gramParser.EOF, 0); }
-		public List<TerminalNode> TK_OP_INTDIV() { return getTokens(gramParser.TK_OP_INTDIV); }
-		public TerminalNode TK_OP_INTDIV(int i) {
-			return getToken(gramParser.TK_OP_INTDIV, i);
+		public List<TerminalNode> TK_COMMENTS() { return getTokens(gramParser.TK_COMMENTS); }
+		public TerminalNode TK_COMMENTS(int i) {
+			return getToken(gramParser.TK_COMMENTS, i);
 		}
 		public TestingRuleContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -205,7 +215,7 @@ public class gramParser extends Parser {
 					{
 					{
 					setState(9);
-					match(TK_OP_INTDIV);
+					match(TK_COMMENTS);
 					}
 					}
 					break;
@@ -232,10 +242,10 @@ public class gramParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3*\23\4\2\t\2\4\3\t"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3<\23\4\2\t\2\4\3\t"+
 		"\3\3\2\6\2\b\n\2\r\2\16\2\t\3\3\6\3\r\n\3\r\3\16\3\16\3\3\3\3\3\3\3\16"+
 		"\2\4\2\4\2\3\2\3\2\22\2\7\3\2\2\2\4\f\3\2\2\2\6\b\n\2\2\2\7\6\3\2\2\2"+
-		"\b\t\3\2\2\2\t\7\3\2\2\2\t\n\3\2\2\2\n\3\3\2\2\2\13\r\7*\2\2\f\13\3\2"+
+		"\b\t\3\2\2\2\t\7\3\2\2\2\t\n\3\2\2\2\n\3\3\2\2\2\13\r\7<\2\2\f\13\3\2"+
 		"\2\2\r\16\3\2\2\2\16\17\3\2\2\2\16\f\3\2\2\2\17\20\3\2\2\2\20\21\7\2\2"+
 		"\3\21\5\3\2\2\2\4\t\16";
 	public static final ATN _ATN =

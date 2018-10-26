@@ -24,9 +24,9 @@
   * vectors ([])
   * acces a tuples (.)
   * assignacio (:=)
+* comentaris
 
 ## TODO LEXIC
 
-* comentaris
 * separadors
 * identificadors

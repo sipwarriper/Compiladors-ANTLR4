@@ -4,6 +4,7 @@ grammar gram;
 inici: (~EOF)+;
 
 
+
 //Regles lexiques
 
 TK_WS: ( ' ' | '\t' | '\n' | '\r' ) -> skip;
@@ -101,5 +102,12 @@ TK_OP_ASSIGN: ':=';
 
 
 
-testingRule: TK_OP_INTDIV+? EOF;
+//-----------Comentaris--------------------------------
+
+TK_COMMENTS: '//' (.)*? ('\n' | EOF);
+
+TK_MULTILINE_COMMENTS: '/*' (.)*? '*/';
+
+
+testingRule: TK_MULTILINE_COMMENTS+? EOF;
 
