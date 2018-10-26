@@ -21,7 +21,7 @@ public class gramParser extends Parser {
 		TK_PC_VARIABLES=10, TK_PC_FVARIABLES=11, TK_PC_TIPUS=12, TK_PC_FTIPUS=13, 
 		TK_PC_SI=14, TK_PC_ALTRAMENT=15, TK_PC_FSI=16, TK_PC_PER=17, TK_PC_DE=18, 
 		TK_PC_FINS=19, TK_PC_FER=20, TK_PC_FPER=21, TK_PC_MENTRE=22, TK_PC_FMENTRE=23, 
-		TK_CONST_CHAR=24;
+		TK_CONST_CHAR=24, TK_CONST_REAL=25, TK_CONST_BOOL=26;
 	public static final int
 		RULE_inici = 0, RULE_testingRule = 1;
 	public static final String[] ruleNames = {
@@ -39,7 +39,8 @@ public class gramParser extends Parser {
 		"TK_PC_FUNCIO", "TK_PC_FFUNCIO", "TK_PC_CONSTANTS", "TK_PC_FCONSTANTS", 
 		"TK_PC_VARIABLES", "TK_PC_FVARIABLES", "TK_PC_TIPUS", "TK_PC_FTIPUS", 
 		"TK_PC_SI", "TK_PC_ALTRAMENT", "TK_PC_FSI", "TK_PC_PER", "TK_PC_DE", "TK_PC_FINS", 
-		"TK_PC_FER", "TK_PC_FPER", "TK_PC_MENTRE", "TK_PC_FMENTRE", "TK_CONST_CHAR"
+		"TK_PC_FER", "TK_PC_FPER", "TK_PC_MENTRE", "TK_PC_FMENTRE", "TK_CONST_CHAR", 
+		"TK_CONST_REAL", "TK_CONST_BOOL"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -142,7 +143,7 @@ public class gramParser extends Parser {
 				setState(7); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TK_WS) | (1L << TK_PC_PROGRAMA) | (1L << TK_PC_FPROGRAMA) | (1L << TK_PC_ACCIO) | (1L << TK_PC_FACCIO) | (1L << TK_PC_FUNCIO) | (1L << TK_PC_FFUNCIO) | (1L << TK_PC_CONSTANTS) | (1L << TK_PC_FCONSTANTS) | (1L << TK_PC_VARIABLES) | (1L << TK_PC_FVARIABLES) | (1L << TK_PC_TIPUS) | (1L << TK_PC_FTIPUS) | (1L << TK_PC_SI) | (1L << TK_PC_ALTRAMENT) | (1L << TK_PC_FSI) | (1L << TK_PC_PER) | (1L << TK_PC_DE) | (1L << TK_PC_FINS) | (1L << TK_PC_FER) | (1L << TK_PC_FPER) | (1L << TK_PC_MENTRE) | (1L << TK_PC_FMENTRE) | (1L << TK_CONST_CHAR))) != 0) );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TK_WS) | (1L << TK_PC_PROGRAMA) | (1L << TK_PC_FPROGRAMA) | (1L << TK_PC_ACCIO) | (1L << TK_PC_FACCIO) | (1L << TK_PC_FUNCIO) | (1L << TK_PC_FFUNCIO) | (1L << TK_PC_CONSTANTS) | (1L << TK_PC_FCONSTANTS) | (1L << TK_PC_VARIABLES) | (1L << TK_PC_FVARIABLES) | (1L << TK_PC_TIPUS) | (1L << TK_PC_FTIPUS) | (1L << TK_PC_SI) | (1L << TK_PC_ALTRAMENT) | (1L << TK_PC_FSI) | (1L << TK_PC_PER) | (1L << TK_PC_DE) | (1L << TK_PC_FINS) | (1L << TK_PC_FER) | (1L << TK_PC_FPER) | (1L << TK_PC_MENTRE) | (1L << TK_PC_FMENTRE) | (1L << TK_CONST_CHAR) | (1L << TK_CONST_REAL) | (1L << TK_CONST_BOOL))) != 0) );
 			}
 		}
 		catch (RecognitionException re) {
@@ -158,9 +159,9 @@ public class gramParser extends Parser {
 
 	public static class TestingRuleContext extends ParserRuleContext {
 		public TerminalNode EOF() { return getToken(gramParser.EOF, 0); }
-		public List<TerminalNode> TK_CONST_CHAR() { return getTokens(gramParser.TK_CONST_CHAR); }
-		public TerminalNode TK_CONST_CHAR(int i) {
-			return getToken(gramParser.TK_CONST_CHAR, i);
+		public List<TerminalNode> TK_CONST_REAL() { return getTokens(gramParser.TK_CONST_REAL); }
+		public TerminalNode TK_CONST_REAL(int i) {
+			return getToken(gramParser.TK_CONST_REAL, i);
 		}
 		public TestingRuleContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -184,24 +185,30 @@ public class gramParser extends Parser {
 	public final TestingRuleContext testingRule() throws RecognitionException {
 		TestingRuleContext _localctx = new TestingRuleContext(_ctx, getState());
 		enterRule(_localctx, 2, RULE_testingRule);
-		int _la;
 		try {
+			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(10); 
 			_errHandler.sync(this);
-			_la = _input.LA(1);
+			_alt = 1+1;
 			do {
-				{
-				{
-				setState(9);
-				match(TK_CONST_CHAR);
-				}
+				switch (_alt) {
+				case 1+1:
+					{
+					{
+					setState(9);
+					match(TK_CONST_REAL);
+					}
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 				}
 				setState(12); 
 				_errHandler.sync(this);
-				_la = _input.LA(1);
-			} while ( _la==TK_CONST_CHAR );
+				_alt = getInterpreter().adaptivePredict(_input,1,_ctx);
+			} while ( _alt!=1 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
 			setState(14);
 			match(EOF);
 			}
@@ -218,12 +225,12 @@ public class gramParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\32\23\4\2\t\2\4\3"+
-		"\t\3\3\2\6\2\b\n\2\r\2\16\2\t\3\3\6\3\r\n\3\r\3\16\3\16\3\3\3\3\3\3\2"+
-		"\2\4\2\4\2\3\2\3\2\22\2\7\3\2\2\2\4\f\3\2\2\2\6\b\n\2\2\2\7\6\3\2\2\2"+
-		"\b\t\3\2\2\2\t\7\3\2\2\2\t\n\3\2\2\2\n\3\3\2\2\2\13\r\7\32\2\2\f\13\3"+
-		"\2\2\2\r\16\3\2\2\2\16\f\3\2\2\2\16\17\3\2\2\2\17\20\3\2\2\2\20\21\7\2"+
-		"\2\3\21\5\3\2\2\2\4\t\16";
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\34\23\4\2\t\2\4\3"+
+		"\t\3\3\2\6\2\b\n\2\r\2\16\2\t\3\3\6\3\r\n\3\r\3\16\3\16\3\3\3\3\3\3\3"+
+		"\16\2\4\2\4\2\3\2\3\2\22\2\7\3\2\2\2\4\f\3\2\2\2\6\b\n\2\2\2\7\6\3\2\2"+
+		"\2\b\t\3\2\2\2\t\7\3\2\2\2\t\n\3\2\2\2\n\3\3\2\2\2\13\r\7\33\2\2\f\13"+
+		"\3\2\2\2\r\16\3\2\2\2\16\17\3\2\2\2\16\f\3\2\2\2\17\20\3\2\2\2\20\21\7"+
+		"\2\2\3\21\5\3\2\2\2\4\t\16";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

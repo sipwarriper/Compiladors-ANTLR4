@@ -17,6 +17,11 @@ TK_PC_FACCIO: 'faccio';
 TK_PC_FUNCIO: 'funcio';
 TK_PC_FFUNCIO: 'ffuncio';
 
+TK_PC_RETURN: 'retorna';
+TK_PC_PARAM_IN: 'ent';
+TK_PC_PARAM_IO: 'entsor';
+
+
 TK_PC_CONSTANTS: 'constants';
 TK_PC_FCONSTANTS: 'fconstants';
 
@@ -25,6 +30,13 @@ TK_PC_FVARIABLES: 'fvariables';
 
 TK_PC_TIPUS: 'tipus';
 TK_PC_FTIPUS: 'ftipus';
+
+TK_PC_TUPLA: 'tupla';
+TK_PC_FTUPLA: 'ftupla';
+
+TK_PC_VECTOR: 'vector';
+TK_PC_MIDA: 'mida';
+TK_PC_INICI: 'inici';
 
 TK_PC_SI: 'si';
 TK_PC_ALTRAMENT: 'altrament';
@@ -51,9 +63,12 @@ fragment CAPLETTER: 'A'..'Z';
 //--------CONSTANTS-----------------------------------------
 TK_CONST_CHAR: '\'' (' ' .. '~' ) | '\\' '\'' '\'';
 
-TK_CONST_REAL: '-'? (('0.' | DIGIT* '.') ('0' | DIGIT)+) ('E' '-'? DIGIT ('0' | DIGIT)*)?;
+TK_CONST_REAL: (('0.' | DIGIT* '.') ('0' | DIGIT)+) ('E' '-'? DIGIT ('0' | DIGIT)*)?;
+
+TK_CONST_BOOL: 'false' | 'true';
+
+TK_CONST_INT: (DIGIT ('0' | DIGIT)*) | '0';
 
 
-
-testingRule: TK_CONST_REAL+? EOF;
+testingRule: TK_CONST_INT+? EOF;
 
