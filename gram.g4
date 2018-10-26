@@ -5,9 +5,11 @@ inici: (~EOF)+;
 
 
 //Regles lexiques
+
 TK_WS: ( ' ' | '\t' | '\n' | '\r' ) -> skip;
 
 //---------PARAULES CLAU-----------------------------
+
 TK_PC_PROGRAMA: 'programa';
 TK_PC_FPROGRAMA: 'fprograma';
 
@@ -39,6 +41,7 @@ TK_PC_MIDA: 'mida';
 TK_PC_INICI: 'inici';
 
 TK_PC_SI: 'si';
+TK_PC_LLAVORS: 'llavors';
 TK_PC_ALTRAMENT: 'altrament';
 TK_PC_FSI: 'fsi';
 
@@ -54,6 +57,7 @@ TK_PC_FMENTRE: 'fmentre'; // el fer ja el tenim del per, aixi que no ens cal aqu
 
 
 //----------FRAGMENTS--------------------------------------
+
 fragment DIGIT: '1'..'9';
 fragment LETTER: 'a'..'z';
 fragment CAPLETTER: 'A'..'Z';
@@ -61,6 +65,7 @@ fragment CAPLETTER: 'A'..'Z';
 
 
 //--------CONSTANTS-----------------------------------------
+
 TK_CONST_CHAR: '\'' (' ' .. '~' ) | '\\' '\'' '\'';
 
 TK_CONST_REAL: (('0.' | DIGIT* '.') ('0' | DIGIT)+) ('E' '-'? DIGIT ('0' | DIGIT)*)?;
@@ -70,5 +75,31 @@ TK_CONST_BOOL: 'false' | 'true';
 TK_CONST_INT: (DIGIT ('0' | DIGIT)*) | '0';
 
 
-testingRule: TK_CONST_INT+? EOF;
+//------OPERADORS-----------------------------------------
+
+TK_OP_SUMA: '+';
+TK_OP_RESTA: '-';
+TK_OP_MULT: '*';
+TK_OP_REALDIV: '/';
+TK_OP_INTDIV: '\\';
+TK_OP_MOD: '%';
+TK_OP_EQ: '==';
+TK_OP_DIFF: '!=';
+TK_OP_GT: '>';
+TK_OP_LT: '<';
+TK_OP_LOET: '<=';
+TK_OP_GOET: '>=';
+TK_OP_NEG: 'no';
+TK_OP_AND: '&';
+TK_OP_O: '|';
+TK_OP_IF_THEN_ELSE_CONDITION: '?';
+TK_OP_IF_THEN_ELSE_ALTENRATIVE: ':';
+TK_OP_VECTOR_OPEN: '[';
+TK_OP_VECTOR_CLOSE: ']';
+TK_OP_TUPLE: '.';
+TK_OP_ASSIGN: ':=';
+
+
+
+testingRule: TK_OP_INTDIV+? EOF;
 

@@ -4,14 +4,13 @@
 ## Done
 * paraules claus
 * constants
-
-## TODO LEXIC
 * operadors
   * suma
   * resta
   * multiplicacio
   * divisio real (/)
   * divisio entera(\)
+  * modul (%)
   * igualtat logica
   * diferencia logica
   * <
@@ -24,6 +23,10 @@
   * if-then-else (condicio ? exptrue : expfalse)
   * vectors ([])
   * acces a tuples (.)
+  * assignacio (:=)
+
+## TODO LEXIC
+
 * comentaris
 * separadors
 * identificadors
