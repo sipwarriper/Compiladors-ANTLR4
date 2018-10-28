@@ -29,9 +29,4 @@
   * assignacio (:=)
 * comentaris
 * separadors
-
-
-## TODO LEXIC
-
 * identificadors
-
