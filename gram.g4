@@ -67,13 +67,13 @@ fragment CAPLETTER: 'A'..'Z';
 
 //--------CONSTANTS-----------------------------------------
 
-TK_CONST_CHAR: '\'' (' ' .. '~' ) | '\\' '\'' '\'';
+TK_CONST_CHAR: '\'' ((' ' .. '~' ) | '\\' '\'') '\'';
 
 TK_CONST_REAL: (('0.' | DIGIT* '.') ('0' | DIGIT)+) ('E' '-'? DIGIT ('0' | DIGIT)*)?;
 
 TK_CONST_BOOL: 'false' | 'true';
 
-TK_CONST_INT: (DIGIT ('0' | DIGIT)*) | '0';
+TK_CONST_INT: (DIGIT ('0' | DIGIT)*) | '0'+;
 
 
 //------OPERADORS-----------------------------------------
@@ -113,6 +113,10 @@ TK_MULTILINE_COMMENTS: '/*' (.)*? '*/';
 TK_SEP_COMMA: ',';
 TK_SEP_SEMICOLON: ';';
 
+//----------Identificadors
 
-testingRule: TK_MULTILINE_COMMENTS+? EOF;
+TK_IDENTIFIER: (LETTER | CAPLETTER) (LETTER|CAPLETTER|DIGIT|'0')*;
+
+
+testingRule: TK_CONST_CHAR+? EOF;
 
