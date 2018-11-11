@@ -1,10 +1,33 @@
 # Compiladors-ANTLR4
 
-## REPASSAR
+##Sintàctic
+
+### Done 
+* main
+    * varBlock
+* typeBlock
+* funcDecBlock
+* constBlock
+* varBlock
+* basicType
+* vector
+* tupla
+
+### TODO
+
+* main
+    * sentences
+* funcImpBlock
+* type
+* comments 
+
+
+## Lèxic
+### REPASSAR
 * operadors
 * separadors
 
-## Done
+### Done
 * paraules claus
 * constants
 * operadors
