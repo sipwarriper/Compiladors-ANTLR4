@@ -199,3 +199,17 @@ accio: TK_PC_ACCIO TK_OP_PAR_OPEN expr (TK_SEP_COMMA expr)* TK_OP_PAR_CLOSE TK_S
 
 read: TK_PC_READ TK_OP_PAR_OPEN TK_IDENTIFIER TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
 write: TK_PC_WRITE TK_OP_PAR_OPEN expr (TK_SEP_COMMA expr)* TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
+
+sentence: (assign|if|for|while|accio|read|write);
+
+
+/*Expressions
+*** un valor constant de tipus basic
+*** una constant
+*** una variable
+*** un acces a tupla id.id
+*** un acces a vector: id[expr]
+*** una crida a funcio: id(expr{,expr}*)
+*** Una operacio o varies expressions (les operacions estan bastant ordenades al pdf)
+*** ternari: a? b:c on a, b i c son expressions
+*/
