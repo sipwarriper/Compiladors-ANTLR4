@@ -62,6 +62,10 @@ TK_PC_REAL: 'real';
 TK_PC_CHAR: 'car';
 TK_PC_BOOL: 'boolea';
 
+//llegir i escriure
+
+TK_PC_READ: 'llegir';
+TK_PC_WRITE: 'escriure';
 
 
 
@@ -115,9 +119,9 @@ TK_OP_PAR_CLOSE: ')';
 
 //-----------Comentaris--------------------------------
 
-TK_COMMENTS: '//' (.)*? ('\n' | EOF);
+TK_COMMENTS: '//' (.)*? ('\n' | EOF ) -> skip;
 
-TK_MULTILINE_COMMENTS: '/*' (.)*? '*/';
+TK_MULTILINE_COMMENTS: '/*' (.)*? '*/' -> skip;
 
 //----------separadors
 
@@ -126,7 +130,7 @@ TK_SEP_SEMICOLON: ';';
 
 //----------Identificadors
 
-TK_IDENTIFIER: (LETTER | CAPLETTER) (LETTER|CAPLETTER|DIGIT|'0')*;
+TK_IDENTIFIER: (LETTER | CAPLETTER) (LETTER|CAPLETTER|DIGIT|'0'|'_' )*;
 
 
 testingRule: TK_CONST_CHAR+? EOF; //regla per testejar
@@ -166,5 +170,32 @@ varBlock: TK_PC_VARIABLES (type TK_IDENTIFIER TK_SEP_SEMICOLON)* TK_PC_FVARIABLE
 funcDecBlock: (accioDec | funcDec)*;
 
 accioDec: TK_PC_ACCIO TK_IDENTIFIER TK_OP_PAR_OPEN params? TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
-funcDec: TK_PC_ACCIO TK_IDENTIFIER TK_OP_PAR_OPEN params? TK_OP_PAR_CLOSE TK_PC_RETURN basicType TK_SEP_SEMICOLON;
-params: (TK_PC_PARAM_IN | TK_PC_PARAM_IO)? tipus TK_IDENTIFIER(TK_SEP_COMMA (TK_PC_PARAM_IN | TK_PC_PARAM_IO)? tipus TK_IDENTIFIER)*;//si no s'epecifica si es entrada o entrada-sortida, es entrada per defecte
+funcDec: TK_PC_FUNCIO TK_IDENTIFIER TK_OP_PAR_OPEN params? TK_OP_PAR_CLOSE TK_PC_RETURN basicType TK_SEP_SEMICOLON;
+params: (TK_PC_PARAM_IN | TK_PC_PARAM_IO)? type TK_IDENTIFIER(TK_SEP_COMMA (TK_PC_PARAM_IN | TK_PC_PARAM_IO)? type TK_IDENTIFIER)*;//si no s'epecifica si es entrada o entrada-sortida, es entrada per defecte
+
+funcImpBlock: (accioImp | funcImp)*;
+accioImp: TK_PC_ACCIO TK_IDENTIFIER TK_OP_PAR_OPEN params? TK_OP_PAR_CLOSE
+          varBlock? sentence* TK_PC_FACCIO;
+funcImp:  TK_PC_FUNCIO TK_IDENTIFIER TK_OP_PAR_OPEN params? TK_OP_PAR_CLOSE TK_PC_RETURN basicType
+          varBlock? sentence*
+          TK_PC_RETURN basicTypeExpr TK_SEP_SEMICOLON
+          TK_PC_FFUNCIO;
+type: TK_IDENTIFIER;
+
+assign: TK_IDENTIFIER TK_OP_ASSIGN expr TK_SEP_SEMICOLON;
+
+if: TK_PC_SI expr TK_PC_LLAVORS
+            sentence*
+            (TK_PC_ALTRAMENT sentence*)?
+            TK_PC_FSI;
+
+for: TK_PC_PER TK_IDENTIFIER TK_PC_DE expr TK_PC_FINS expr TK_PC_FER
+    sentence*
+    TK_PC_FPER;
+while: TK_PC_MENTRE expr TK_PC_FER
+     sentence*
+     TK_PC_FMENTRE;
+accio: TK_PC_ACCIO TK_OP_PAR_OPEN expr (TK_SEP_COMMA expr)* TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
+
+read: TK_PC_READ TK_OP_PAR_OPEN TK_IDENTIFIER TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
+write: TK_PC_WRITE TK_OP_PAR_OPEN expr (TK_SEP_COMMA expr)* TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
