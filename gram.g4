@@ -158,7 +158,8 @@ main: TK_PC_PROGRAMA varBlock? sentence* TK_PC_FPROGRAMA; //nse si es apropiat d
 
 typeBlock: TK_PC_TIPUS newType* TK_PC_FTIPUS;
 
-newType: TK_IDENTIFIER TK_OP_COLON (basicType | vectorDec | tupleDec) TK_SEP_SEMICOLON;
+
+newType: TK_IDENTIFIER TK_OP_COLON (basicType | vectorDec | tuplaDec) TK_SEP_SEMICOLON;
 
 basicType: (TK_PC_INT | TK_PC_REAL | TK_PC_CHAR | TK_PC_BOOL);
 vectorDec: TK_PC_VECTOR basicType TK_PC_MIDA TK_PC_INT (TK_PC_INICI TK_PC_INT)?;
