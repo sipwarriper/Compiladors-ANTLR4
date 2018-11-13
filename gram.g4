@@ -178,7 +178,7 @@ accioImp: TK_PC_ACCIO TK_IDENTIFIER TK_OP_PAR_OPEN params? TK_OP_PAR_CLOSE
           varBlock? sentence* TK_PC_FACCIO;
 funcImp:  TK_PC_FUNCIO TK_IDENTIFIER TK_OP_PAR_OPEN params? TK_OP_PAR_CLOSE TK_PC_RETURN basicType
           varBlock? sentence*
-          TK_PC_RETURN basicTypeExpr TK_SEP_SEMICOLON
+          TK_PC_RETURN expr TK_SEP_SEMICOLON // es una expresio de tipus basic!
           TK_PC_FFUNCIO;
 type: TK_IDENTIFIER;
 
