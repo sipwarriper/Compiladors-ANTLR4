@@ -96,6 +96,7 @@ TK_OP_MULT: '*';
 TK_OP_REALDIV: '/';
 TK_OP_INTDIV: '\\';
 TK_OP_MOD: '%';
+TK_OP_MINUS: '~';
 TK_OP_EQ: '==';
 TK_OP_DIFF: '!=';
 TK_OP_GT: '>';
@@ -104,7 +105,7 @@ TK_OP_LOET: '<=';
 TK_OP_GOET: '>=';
 TK_OP_NEG: 'no';
 TK_OP_AND: '&';
-TK_OP_O: '|';
+TK_OP_OR: '|';
 TK_OP_QUESTION_MARK: '?';
 TK_OP_COLON: ':';
 TK_OP_VECTOR_OPEN: '[';
@@ -157,13 +158,13 @@ main: TK_PC_PROGRAMA varBlock? sentence* TK_PC_FPROGRAMA; //nse si es apropiat d
 
 typeBlock: TK_PC_TIPUS newType* TK_PC_FTIPUS;
 
-newType: TK_IDENTIFIER TK_OP_COLON (basicType | vector | tupla) TK_SEP_SEMICOLON;
+newType: TK_IDENTIFIER TK_OP_COLON (basicType | vectorDec | tuplaDec) TK_SEP_SEMICOLON;
 
 basicType: (TK_PC_INT | TK_PC_REAL | TK_PC_CHAR | TK_PC_BOOL);
-vector: TK_PC_VECTOR basicType TK_PC_MIDA TK_PC_INT (TK_PC_INICI TK_PC_INT)?;
-tupla: TK_PC_TUPLA (basicType TK_IDENTIFIER)+ TK_PC_TUPLA;
+vectorDec: TK_PC_VECTOR basicType TK_PC_MIDA TK_PC_INT (TK_PC_INICI TK_PC_INT)?;
+tupleDec: TK_PC_TUPLA (basicType TK_IDENTIFIER)+ TK_PC_FTUPLA;
 
-constBlock: TK_PC_CONSTANTS (basicType TK_IDENTIFIER TK_OP_ASSIGN (TK_CONST_INT | TK_CONST_REAL | TK_CONST_CHAR | TK_CONST_BOOL)TK_SEP_SEMICOLON)* TK_PC_FCONSTANTS; //preguntar si ha de ser * com al enunciat o + (una o m'es, obligar a no declarar block si no luses)
+constBlock: TK_PC_CONSTANTS (basicType TK_IDENTIFIER TK_OP_ASSIGN (constValue)TK_SEP_SEMICOLON)* TK_PC_FCONSTANTS; //preguntar si ha de ser * com al enunciat o + (una o m'es, obligar a no declarar block si no luses)
 
 varBlock: TK_PC_VARIABLES (type TK_IDENTIFIER TK_SEP_SEMICOLON)* TK_PC_FVARIABLES;
 
@@ -195,21 +196,70 @@ for: TK_PC_PER TK_IDENTIFIER TK_PC_DE expr TK_PC_FINS expr TK_PC_FER
 while: TK_PC_MENTRE expr TK_PC_FER
      sentence*
      TK_PC_FMENTRE;
-accio: TK_PC_ACCIO TK_OP_PAR_OPEN expr (TK_SEP_COMMA expr)* TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
+accio: TK_PC_ACCIO TK_OP_PAR_OPEN (expr (TK_SEP_COMMA expr)*)? TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
 
 read: TK_PC_READ TK_OP_PAR_OPEN TK_IDENTIFIER TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
 write: TK_PC_WRITE TK_OP_PAR_OPEN expr (TK_SEP_COMMA expr)* TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
 
 sentence: (assign|if|for|while|accio|read|write);
 
-
 /*Expressions
 *** un valor constant de tipus basic
-*** una constant
-*** una variable
+*** una constant (son ids)
+*** una variable (son ids)
 *** un acces a tupla id.id
 *** un acces a vector: id[expr]
 *** una crida a funcio: id(expr{,expr}*)
 *** Una operacio o varies expressions (les operacions estan bastant ordenades al pdf)
 *** ternari: a? b:c on a, b i c son expressions
 */
+
+constValue: TK_CONST_INT | TK_CONST_REAL | TK_CONST_CHAR | TK_CONST_BOOL;
+
+tuple: TK_IDENTIFIER TK_OP_TUPLE TK_IDENTIFIER;
+
+vector: TK_IDENTIFIER TK_OP_VECTOR_OPEN expr TK_OP_VECTOR_CLOSE;
+
+func: TK_IDENTIFIER TK_OP_PAR_OPEN (expr (TK_SEP_COMMA expr)*)? TK_OP_PAR_CLOSE;
+
+/*
+***  no ∼
+***  ∗ / \ %
+***  + −
+***  == =! < <= > >=
+***  & |
+***  if −then−else
+*/
+
+operation: ;
+
+expr: (logicsDown TK_OP_QUESTION_MARK expr TK_OP_COLON expr) | logicsDown;
+
+logicsDown: (logicUp (TK_OP_AND | TK_OP_OR) logicsDown) | logicUp;
+
+logicUp: (sum (TK_OP_EQ | TK_OP_DIFF | TK_OP_GT | TK_OP_LT | TK_OP_LOET | TK_OP_GOET) logicUp) | sum;
+
+sum: (mult (TK_OP_SUMA | TK_OP_RESTA) sum)|mult;
+
+mult: (neg (TK_OP_MULT | TK_OP_REALDIV | TK_OP_INTDIV | TK_OP_MOD) mult)|neg;
+neg: ((TK_OP_NEG | TK_OP_MINUS) neg)| ;
+
+parenthesis: TK_OP_PAR_OPEN expr TK_OP_PAR_CLOSE;
+
+
+/*
+ternari: expr TK_OP_QUESTION_MARK expr TK_OP_COLON expr;
+
+logicsDown: expr (TK_OP_AND | TK_OP_OR) expr;
+
+logicUp: expr (TK_OP_EQ | TK_OP_DIFF | TK_OP_GT | TK_OP_LT | TK_OP_LOET | TK_OP_GOET) expr;
+
+sum: expr (TK_OP_SUMA | TK_OP_RESTA) expr;
+
+mult: expr (TK_OP_MULT | TK_OP_REALDIV | TK_OP_INTDIV | TK_OP_MOD) expr;
+
+neg: (TK_OP_NEG | TK_OP_MINUS) expr;
+
+parenthesis: TK_OP_PAR_OPEN expr TK_OP_PAR_CLOSE;
+
+expr: constValue | TK_IDENTIFIER | tuple | vector | operation; */
