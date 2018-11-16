@@ -112,6 +112,7 @@ TK_OP_VECTOR_OPEN: '[';
 TK_OP_VECTOR_CLOSE: ']';
 TK_OP_TUPLE: '.';
 TK_OP_ASSIGN: ':=';
+TK_OP_QUOTE: '"';
 
 TK_OP_PAR_OPEN: '(';
 TK_OP_PAR_CLOSE: ')';
@@ -131,10 +132,11 @@ TK_SEP_SEMICOLON: ';';
 
 //----------Identificadors
 
+TK_STRING_LITERAL: TK_OP_QUOTE (LETTER|CAPLETTER|DIGIT|'0'|'_' )* TK_OP_QUOTE;
 TK_IDENTIFIER: (LETTER | CAPLETTER) (LETTER|CAPLETTER|DIGIT|'0'|'_' )*;
 
 
-testingRule: TK_CONST_CHAR+? EOF; //regla per testejar
+testingRule: TK_STRING_LITERAL EOF; //regla per testejar
 
 
 // Analisis sintactic
@@ -200,7 +202,8 @@ while_rule: TK_PC_MENTRE expr TK_PC_FER
 accio: TK_IDENTIFIER TK_OP_PAR_OPEN (expr (TK_SEP_COMMA expr)*)? TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
 
 read: TK_PC_READ TK_OP_PAR_OPEN TK_IDENTIFIER TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
-write: TK_PC_WRITE TK_OP_PAR_OPEN expr (TK_SEP_COMMA expr)* TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
+write: TK_PC_WRITE TK_OP_PAR_OPEN (expr | TK_STRING_LITERAL) (TK_SEP_COMMA (expr | TK_STRING_LITERAL))* TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
+writeln: TK_PC_WRITE TK_OP_PAR_OPEN (expr | TK_STRING_LITERAL) (TK_SEP_COMMA (expr | TK_STRING_LITERAL))* TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
 
 sentence: (assign|if_rule|for_rule|while_rule|accio|read|write) ;
 

@@ -327,6 +327,18 @@ public class gramBaseListener implements gramListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterWriteln(gramParser.WritelnContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitWriteln(gramParser.WritelnContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterSentence(gramParser.SentenceContext ctx) { }
 	/**
 	 * {@inheritDoc}

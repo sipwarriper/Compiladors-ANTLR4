@@ -166,6 +166,12 @@ public interface gramVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitWrite(gramParser.WriteContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link gramParser#writeln}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWriteln(gramParser.WritelnContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link gramParser#sentence}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

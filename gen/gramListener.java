@@ -267,6 +267,16 @@ public interface gramListener extends ParseTreeListener {
 	 */
 	void exitWrite(gramParser.WriteContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link gramParser#writeln}.
+	 * @param ctx the parse tree
+	 */
+	void enterWriteln(gramParser.WritelnContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link gramParser#writeln}.
+	 * @param ctx the parse tree
+	 */
+	void exitWriteln(gramParser.WritelnContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link gramParser#sentence}.
 	 * @param ctx the parse tree
 	 */
