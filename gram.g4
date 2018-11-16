@@ -66,6 +66,7 @@ TK_PC_BOOL: 'boolea';
 
 TK_PC_READ: 'llegir';
 TK_PC_WRITE: 'escriure';
+TK_PC_WRITELN: 'escriureln';
 
 
 
@@ -167,7 +168,7 @@ basicType: (TK_PC_INT | TK_PC_REAL | TK_PC_CHAR | TK_PC_BOOL);
 vectorDec: TK_PC_VECTOR basicType TK_PC_MIDA TK_PC_INT (TK_PC_INICI TK_PC_INT)?;
 tuplaDec: TK_PC_TUPLA (basicType TK_IDENTIFIER)+ TK_PC_FTUPLA;
 
-constBlock: TK_PC_CONSTANTS (basicType TK_IDENTIFIER TK_OP_ASSIGN (constValue)TK_SEP_SEMICOLON)* TK_PC_FCONSTANTS; //preguntar si ha de ser * com al enunciat o + (una o m'es, obligar a no declarar block si no luses)
+constBlock: TK_PC_CONSTANTS (basicType TK_IDENTIFIER TK_OP_ASSIGN (constValue| TK_STRING_LITERAL)TK_SEP_SEMICOLON)* TK_PC_FCONSTANTS; //preguntar si ha de ser * com al enunciat o + (una o m'es, obligar a no declarar block si no luses)
 
 varBlock: TK_PC_VARIABLES (type TK_IDENTIFIER TK_SEP_SEMICOLON)* TK_PC_FVARIABLES;
 
@@ -203,9 +204,9 @@ accio: TK_IDENTIFIER TK_OP_PAR_OPEN (expr (TK_SEP_COMMA expr)*)? TK_OP_PAR_CLOSE
 
 read: TK_PC_READ TK_OP_PAR_OPEN TK_IDENTIFIER TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
 write: TK_PC_WRITE TK_OP_PAR_OPEN (expr | TK_STRING_LITERAL) (TK_SEP_COMMA (expr | TK_STRING_LITERAL))* TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
-writeln: TK_PC_WRITE TK_OP_PAR_OPEN (expr | TK_STRING_LITERAL) (TK_SEP_COMMA (expr | TK_STRING_LITERAL))* TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
+writeln: TK_PC_WRITELN TK_OP_PAR_OPEN (expr | TK_STRING_LITERAL) (TK_SEP_COMMA (expr | TK_STRING_LITERAL))* TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
 
-sentence: (assign|if_rule|for_rule|while_rule|accio|read|write) ;
+sentence: (assign|if_rule|for_rule|while_rule|accio|read|write|writeln) ;
 
 /*Expressions
 *** un valor constant de tipus basic
@@ -249,21 +250,3 @@ neg: ((TK_OP_NEG | TK_OP_MINUS) neg)| value;
 value: constValue|TK_IDENTIFIER|tuple|vector|func|parenthesis;
 
 parenthesis: TK_OP_PAR_OPEN expr TK_OP_PAR_CLOSE;
-
-
-/*
-ternari: expr TK_OP_QUESTION_MARK expr TK_OP_COLON expr;
-
-logicsDown: expr (TK_OP_AND | TK_OP_OR) expr;
-
-logicUp: expr (TK_OP_EQ | TK_OP_DIFF | TK_OP_GT | TK_OP_LT | TK_OP_LOET | TK_OP_GOET) expr;
-
-sum: expr (TK_OP_SUMA | TK_OP_RESTA) expr;
-
-mult: expr (TK_OP_MULT | TK_OP_REALDIV | TK_OP_INTDIV | TK_OP_MOD) expr;
-
-neg: (TK_OP_NEG | TK_OP_MINUS) expr;
-
-parenthesis: TK_OP_PAR_OPEN expr TK_OP_PAR_CLOSE;
-
-expr: constValue | TK_IDENTIFIER | tuple | vector | operation; */
