@@ -1,5 +1,10 @@
 grammar gram;
 
+/*
+******************* la regla inicial del programa és la regla program *******************
+*/
+
+
 //Regla sintactica: qualsevol token diferent de EOF
 inici: (~EOF)+;
 
