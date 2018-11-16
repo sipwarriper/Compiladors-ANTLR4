@@ -133,7 +133,7 @@ TK_SEP_SEMICOLON: ';';
 
 //----------Identificadors
 
-TK_STRING_LITERAL: TK_OP_QUOTE (LETTER|CAPLETTER|DIGIT|'0'|'_' )* TK_OP_QUOTE;
+TK_STRING_LITERAL: TK_OP_QUOTE ((' ' .. '~' ) | '\\' '\'') * TK_OP_QUOTE;
 TK_IDENTIFIER: (LETTER | CAPLETTER) (LETTER|CAPLETTER|DIGIT|'0'|'_' )*;
 
 
@@ -157,7 +157,7 @@ Estructura d'un programa:
 
 program: typeBlock? funcDecBlock? constBlock? main funcImpBlock?;
 
-main: TK_PC_PROGRAMA varBlock? sentence* TK_PC_FPROGRAMA; //nse si es apropiat dirli sentence pero weno
+main: TK_PC_PROGRAMA TK_IDENTIFIER varBlock? sentence* TK_PC_FPROGRAMA; //nse si es apropiat dirli sentence pero weno
 
 typeBlock: TK_PC_TIPUS newType* TK_PC_FTIPUS;
 
@@ -165,8 +165,8 @@ typeBlock: TK_PC_TIPUS newType* TK_PC_FTIPUS;
 newType: TK_IDENTIFIER TK_OP_COLON (basicType | vectorDec | tuplaDec) TK_SEP_SEMICOLON;
 
 basicType: (TK_PC_INT | TK_PC_REAL | TK_PC_CHAR | TK_PC_BOOL);
-vectorDec: TK_PC_VECTOR basicType TK_PC_MIDA TK_PC_INT (TK_PC_INICI TK_PC_INT)?;
-tuplaDec: TK_PC_TUPLA (basicType TK_IDENTIFIER)+ TK_PC_FTUPLA;
+vectorDec: TK_PC_VECTOR basicType TK_PC_MIDA TK_CONST_INT (TK_PC_INICI TK_CONST_INT)?;
+tuplaDec: TK_PC_TUPLA (basicType TK_IDENTIFIER TK_SEP_SEMICOLON)+ TK_PC_FTUPLA;
 
 constBlock: TK_PC_CONSTANTS (basicType TK_IDENTIFIER TK_OP_ASSIGN (constValue| TK_STRING_LITERAL)TK_SEP_SEMICOLON)* TK_PC_FCONSTANTS; //preguntar si ha de ser * com al enunciat o + (una o m'es, obligar a no declarar block si no luses)
 
@@ -187,7 +187,7 @@ funcImp:  TK_PC_FUNCIO TK_IDENTIFIER TK_OP_PAR_OPEN params? TK_OP_PAR_CLOSE TK_P
           TK_PC_FFUNCIO;
 type: TK_IDENTIFIER | basicType;
 
-assign: TK_IDENTIFIER TK_OP_ASSIGN expr TK_SEP_SEMICOLON;
+assign: (TK_IDENTIFIER| tuple | vector)TK_OP_ASSIGN expr TK_SEP_SEMICOLON;
 
 if_rule: TK_PC_SI expr TK_PC_LLAVORS
             sentence*
@@ -204,7 +204,7 @@ accio: TK_IDENTIFIER TK_OP_PAR_OPEN (expr (TK_SEP_COMMA expr)*)? TK_OP_PAR_CLOSE
 
 read: TK_PC_READ TK_OP_PAR_OPEN TK_IDENTIFIER TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
 write: TK_PC_WRITE TK_OP_PAR_OPEN (expr | TK_STRING_LITERAL) (TK_SEP_COMMA (expr | TK_STRING_LITERAL))* TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
-writeln: TK_PC_WRITELN TK_OP_PAR_OPEN (expr | TK_STRING_LITERAL) (TK_SEP_COMMA (expr | TK_STRING_LITERAL))* TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
+writeln: TK_PC_WRITELN TK_OP_PAR_OPEN( (expr | TK_STRING_LITERAL) (TK_SEP_COMMA (expr | TK_STRING_LITERAL))*)? TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
 
 sentence: (assign|if_rule|for_rule|while_rule|accio|read|write|writeln) ;
 

@@ -1,4 +1,4 @@
-// Generated from /home/klanc/Projects/Uni/4t/Compiladors/Compiladors-ANTLR4/gram.g4 by ANTLR 4.7
+// Generated from /home/sipwarriper/IdeaProjects/ANTLR4-Compiladors/gram.g4 by ANTLR 4.7
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
