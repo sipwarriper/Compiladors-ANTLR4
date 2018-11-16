@@ -1,6 +1,7 @@
 grammar gram;
 
 /*
+******************* Autors: Lluís Trilla i Ismael El Habri
 ******************* la regla inicial del programa és la regla program *******************
 */
 
