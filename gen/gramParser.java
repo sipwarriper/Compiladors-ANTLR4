@@ -22,32 +22,32 @@ public class gramParser extends Parser {
 		TK_PC_TIPUS=15, TK_PC_FTIPUS=16, TK_PC_TUPLA=17, TK_PC_FTUPLA=18, TK_PC_VECTOR=19, 
 		TK_PC_MIDA=20, TK_PC_INICI=21, TK_PC_SI=22, TK_PC_LLAVORS=23, TK_PC_ALTRAMENT=24, 
 		TK_PC_FSI=25, TK_PC_PER=26, TK_PC_DE=27, TK_PC_FINS=28, TK_PC_FER=29, 
-		TK_PC_FPER=30, TK_PC_MENTRE=31, TK_PC_FMENTRE=32, TK_PC_INT=33, TK_PC_REAL=34,
-		TK_PC_CHAR=35, TK_PC_BOOL=36, TK_PC_READ=37, TK_PC_WRITE=38, TK_CONST_CHAR=39,
-		TK_CONST_REAL=40, TK_CONST_BOOL=41, TK_CONST_INT=42, TK_OP_SUMA=43, TK_OP_RESTA=44,
-		TK_OP_MULT=45, TK_OP_REALDIV=46, TK_OP_INTDIV=47, TK_OP_MOD=48, TK_OP_MINUS=49,
-		TK_OP_EQ=50, TK_OP_DIFF=51, TK_OP_GT=52, TK_OP_LT=53, TK_OP_LOET=54, TK_OP_GOET=55,
-		TK_OP_NEG=56, TK_OP_AND=57, TK_OP_OR=58, TK_OP_QUESTION_MARK=59, TK_OP_COLON=60,
-		TK_OP_VECTOR_OPEN=61, TK_OP_VECTOR_CLOSE=62, TK_OP_TUPLE=63, TK_OP_ASSIGN=64,
-		TK_OP_PAR_OPEN=65, TK_OP_PAR_CLOSE=66, TK_COMMENTS=67, TK_MULTILINE_COMMENTS=68,
+		TK_PC_FPER=30, TK_PC_MENTRE=31, TK_PC_FMENTRE=32, TK_PC_INT=33, TK_PC_REAL=34, 
+		TK_PC_CHAR=35, TK_PC_BOOL=36, TK_PC_READ=37, TK_PC_WRITE=38, TK_CONST_CHAR=39, 
+		TK_CONST_REAL=40, TK_CONST_BOOL=41, TK_CONST_INT=42, TK_OP_SUMA=43, TK_OP_RESTA=44, 
+		TK_OP_MULT=45, TK_OP_REALDIV=46, TK_OP_INTDIV=47, TK_OP_MOD=48, TK_OP_MINUS=49, 
+		TK_OP_EQ=50, TK_OP_DIFF=51, TK_OP_GT=52, TK_OP_LT=53, TK_OP_LOET=54, TK_OP_GOET=55, 
+		TK_OP_NEG=56, TK_OP_AND=57, TK_OP_OR=58, TK_OP_QUESTION_MARK=59, TK_OP_COLON=60, 
+		TK_OP_VECTOR_OPEN=61, TK_OP_VECTOR_CLOSE=62, TK_OP_TUPLE=63, TK_OP_ASSIGN=64, 
+		TK_OP_PAR_OPEN=65, TK_OP_PAR_CLOSE=66, TK_COMMENTS=67, TK_MULTILINE_COMMENTS=68, 
 		TK_SEP_COMMA=69, TK_SEP_SEMICOLON=70, TK_IDENTIFIER=71;
 	public static final int
-		RULE_inici = 0, RULE_testingRule = 1, RULE_program = 2, RULE_main = 3,
-		RULE_typeBlock = 4, RULE_newType = 5, RULE_basicType = 6, RULE_vectorDec = 7,
-		RULE_tupleDec = 8, RULE_constBlock = 9, RULE_varBlock = 10, RULE_funcDecBlock = 11,
-		RULE_accioDec = 12, RULE_funcDec = 13, RULE_params = 14, RULE_funcImpBlock = 15,
-		RULE_accioImp = 16, RULE_funcImp = 17, RULE_type = 18, RULE_assign = 19,
-		RULE_if_rule = 20, RULE_for_rule = 21, RULE_while_rule = 22, RULE_accio = 23,
-		RULE_read = 24, RULE_write = 25, RULE_sentence = 26, RULE_constValue = 27,
-		RULE_tuple = 28, RULE_vector = 29, RULE_func = 30, RULE_expr = 31, RULE_logicsDown = 32,
-		RULE_logicUp = 33, RULE_sum = 34, RULE_mult = 35, RULE_neg = 36, RULE_value = 37,
+		RULE_inici = 0, RULE_testingRule = 1, RULE_program = 2, RULE_main = 3, 
+		RULE_typeBlock = 4, RULE_newType = 5, RULE_basicType = 6, RULE_vectorDec = 7, 
+		RULE_tuplaDec = 8, RULE_constBlock = 9, RULE_varBlock = 10, RULE_funcDecBlock = 11, 
+		RULE_accioDec = 12, RULE_funcDec = 13, RULE_params = 14, RULE_funcImpBlock = 15, 
+		RULE_accioImp = 16, RULE_funcImp = 17, RULE_type = 18, RULE_assign = 19, 
+		RULE_if_rule = 20, RULE_for_rule = 21, RULE_while_rule = 22, RULE_accio = 23, 
+		RULE_read = 24, RULE_write = 25, RULE_sentence = 26, RULE_constValue = 27, 
+		RULE_tuple = 28, RULE_vector = 29, RULE_func = 30, RULE_expr = 31, RULE_logicsDown = 32, 
+		RULE_logicUp = 33, RULE_sum = 34, RULE_mult = 35, RULE_neg = 36, RULE_value = 37, 
 		RULE_parenthesis = 38;
 	public static final String[] ruleNames = {
-		"inici", "testingRule", "program", "main", "typeBlock", "newType", "basicType",
-		"vectorDec", "tupleDec", "constBlock", "varBlock", "funcDecBlock", "accioDec",
-		"funcDec", "params", "funcImpBlock", "accioImp", "funcImp", "type", "assign",
-		"if_rule", "for_rule", "while_rule", "accio", "read", "write", "sentence",
-		"constValue", "tuple", "vector", "func", "expr", "logicsDown", "logicUp",
+		"inici", "testingRule", "program", "main", "typeBlock", "newType", "basicType", 
+		"vectorDec", "tuplaDec", "constBlock", "varBlock", "funcDecBlock", "accioDec", 
+		"funcDec", "params", "funcImpBlock", "accioImp", "funcImp", "type", "assign", 
+		"if_rule", "for_rule", "while_rule", "accio", "read", "write", "sentence", 
+		"constValue", "tuple", "vector", "func", "expr", "logicsDown", "logicUp", 
 		"sum", "mult", "neg", "value", "parenthesis"
 	};
 
@@ -57,8 +57,8 @@ public class gramParser extends Parser {
 		"'variables'", "'fvariables'", "'tipus'", "'ftipus'", "'tupla'", "'ftupla'", 
 		"'vector'", "'mida'", "'inici'", "'si'", "'llavors'", "'altrament'", "'fsi'", 
 		"'per'", "'de'", "'fins'", "'fer'", "'fper'", "'mentre'", "'fmentre'", 
-		"'enter'", "'real'", "'car'", "'boolea'", "'llegir'", "'escriure'", null,
-		null, null, null, "'+'", "'-'", "'*'", "'/'", "'\\'", "'%'", "'~'", "'=='",
+		"'enter'", "'real'", "'car'", "'boolea'", "'llegir'", "'escriure'", null, 
+		null, null, null, "'+'", "'-'", "'*'", "'/'", "'\\'", "'%'", "'~'", "'=='", 
 		"'!='", "'>'", "'<'", "'<='", "'>='", "'no'", "'&'", "'|'", "'?'", "':'", 
 		"'['", "']'", "'.'", "':='", "'('", "')'", null, null, "','", "';'"
 	};
@@ -69,14 +69,14 @@ public class gramParser extends Parser {
 		"TK_PC_TIPUS", "TK_PC_FTIPUS", "TK_PC_TUPLA", "TK_PC_FTUPLA", "TK_PC_VECTOR", 
 		"TK_PC_MIDA", "TK_PC_INICI", "TK_PC_SI", "TK_PC_LLAVORS", "TK_PC_ALTRAMENT", 
 		"TK_PC_FSI", "TK_PC_PER", "TK_PC_DE", "TK_PC_FINS", "TK_PC_FER", "TK_PC_FPER", 
-		"TK_PC_MENTRE", "TK_PC_FMENTRE", "TK_PC_INT", "TK_PC_REAL", "TK_PC_CHAR",
-		"TK_PC_BOOL", "TK_PC_READ", "TK_PC_WRITE", "TK_CONST_CHAR", "TK_CONST_REAL",
-		"TK_CONST_BOOL", "TK_CONST_INT", "TK_OP_SUMA", "TK_OP_RESTA", "TK_OP_MULT",
-		"TK_OP_REALDIV", "TK_OP_INTDIV", "TK_OP_MOD", "TK_OP_MINUS", "TK_OP_EQ",
-		"TK_OP_DIFF", "TK_OP_GT", "TK_OP_LT", "TK_OP_LOET", "TK_OP_GOET", "TK_OP_NEG",
-		"TK_OP_AND", "TK_OP_OR", "TK_OP_QUESTION_MARK", "TK_OP_COLON", "TK_OP_VECTOR_OPEN",
-		"TK_OP_VECTOR_CLOSE", "TK_OP_TUPLE", "TK_OP_ASSIGN", "TK_OP_PAR_OPEN",
-		"TK_OP_PAR_CLOSE", "TK_COMMENTS", "TK_MULTILINE_COMMENTS", "TK_SEP_COMMA",
+		"TK_PC_MENTRE", "TK_PC_FMENTRE", "TK_PC_INT", "TK_PC_REAL", "TK_PC_CHAR", 
+		"TK_PC_BOOL", "TK_PC_READ", "TK_PC_WRITE", "TK_CONST_CHAR", "TK_CONST_REAL", 
+		"TK_CONST_BOOL", "TK_CONST_INT", "TK_OP_SUMA", "TK_OP_RESTA", "TK_OP_MULT", 
+		"TK_OP_REALDIV", "TK_OP_INTDIV", "TK_OP_MOD", "TK_OP_MINUS", "TK_OP_EQ", 
+		"TK_OP_DIFF", "TK_OP_GT", "TK_OP_LT", "TK_OP_LOET", "TK_OP_GOET", "TK_OP_NEG", 
+		"TK_OP_AND", "TK_OP_OR", "TK_OP_QUESTION_MARK", "TK_OP_COLON", "TK_OP_VECTOR_OPEN", 
+		"TK_OP_VECTOR_CLOSE", "TK_OP_TUPLE", "TK_OP_ASSIGN", "TK_OP_PAR_OPEN", 
+		"TK_OP_PAR_CLOSE", "TK_COMMENTS", "TK_MULTILINE_COMMENTS", "TK_SEP_COMMA", 
 		"TK_SEP_SEMICOLON", "TK_IDENTIFIER"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
@@ -159,7 +159,7 @@ public class gramParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(79);
+			setState(79); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
@@ -177,7 +177,7 @@ public class gramParser extends Parser {
 				}
 				}
 				}
-				setState(81);
+				setState(81); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TK_WS) | (1L << TK_PC_PROGRAMA) | (1L << TK_PC_FPROGRAMA) | (1L << TK_PC_ACCIO) | (1L << TK_PC_FACCIO) | (1L << TK_PC_FUNCIO) | (1L << TK_PC_FFUNCIO) | (1L << TK_PC_RETURN) | (1L << TK_PC_PARAM_IN) | (1L << TK_PC_PARAM_IO) | (1L << TK_PC_CONSTANTS) | (1L << TK_PC_FCONSTANTS) | (1L << TK_PC_VARIABLES) | (1L << TK_PC_FVARIABLES) | (1L << TK_PC_TIPUS) | (1L << TK_PC_FTIPUS) | (1L << TK_PC_TUPLA) | (1L << TK_PC_FTUPLA) | (1L << TK_PC_VECTOR) | (1L << TK_PC_MIDA) | (1L << TK_PC_INICI) | (1L << TK_PC_SI) | (1L << TK_PC_LLAVORS) | (1L << TK_PC_ALTRAMENT) | (1L << TK_PC_FSI) | (1L << TK_PC_PER) | (1L << TK_PC_DE) | (1L << TK_PC_FINS) | (1L << TK_PC_FER) | (1L << TK_PC_FPER) | (1L << TK_PC_MENTRE) | (1L << TK_PC_FMENTRE) | (1L << TK_PC_INT) | (1L << TK_PC_REAL) | (1L << TK_PC_CHAR) | (1L << TK_PC_BOOL) | (1L << TK_PC_READ) | (1L << TK_PC_WRITE) | (1L << TK_CONST_CHAR) | (1L << TK_CONST_REAL) | (1L << TK_CONST_BOOL) | (1L << TK_CONST_INT) | (1L << TK_OP_SUMA) | (1L << TK_OP_RESTA) | (1L << TK_OP_MULT) | (1L << TK_OP_REALDIV) | (1L << TK_OP_INTDIV) | (1L << TK_OP_MOD) | (1L << TK_OP_MINUS) | (1L << TK_OP_EQ) | (1L << TK_OP_DIFF) | (1L << TK_OP_GT) | (1L << TK_OP_LT) | (1L << TK_OP_LOET) | (1L << TK_OP_GOET) | (1L << TK_OP_NEG) | (1L << TK_OP_AND) | (1L << TK_OP_OR) | (1L << TK_OP_QUESTION_MARK) | (1L << TK_OP_COLON) | (1L << TK_OP_VECTOR_OPEN) | (1L << TK_OP_VECTOR_CLOSE) | (1L << TK_OP_TUPLE))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (TK_OP_ASSIGN - 64)) | (1L << (TK_OP_PAR_OPEN - 64)) | (1L << (TK_OP_PAR_CLOSE - 64)) | (1L << (TK_COMMENTS - 64)) | (1L << (TK_MULTILINE_COMMENTS - 64)) | (1L << (TK_SEP_COMMA - 64)) | (1L << (TK_SEP_SEMICOLON - 64)) | (1L << (TK_IDENTIFIER - 64)))) != 0) );
@@ -226,7 +226,7 @@ public class gramParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(84);
+			setState(84); 
 			_errHandler.sync(this);
 			_alt = 1+1;
 			do {
@@ -242,7 +242,7 @@ public class gramParser extends Parser {
 				default:
 					throw new NoViableAltException(this);
 				}
-				setState(86);
+				setState(86); 
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,1,_ctx);
 			} while ( _alt!=1 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
@@ -411,7 +411,7 @@ public class gramParser extends Parser {
 			setState(110);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TK_PC_ACCIO) | (1L << TK_PC_SI) | (1L << TK_PC_PER) | (1L << TK_PC_MENTRE) | (1L << TK_PC_READ) | (1L << TK_PC_WRITE))) != 0) || _la==TK_IDENTIFIER) {
+			while (((((_la - 22)) & ~0x3f) == 0 && ((1L << (_la - 22)) & ((1L << (TK_PC_SI - 22)) | (1L << (TK_PC_PER - 22)) | (1L << (TK_PC_MENTRE - 22)) | (1L << (TK_PC_READ - 22)) | (1L << (TK_PC_WRITE - 22)) | (1L << (TK_IDENTIFIER - 22)))) != 0)) {
 				{
 				{
 				setState(107);
@@ -513,8 +513,8 @@ public class gramParser extends Parser {
 		public VectorDecContext vectorDec() {
 			return getRuleContext(VectorDecContext.class,0);
 		}
-		public TupleDecContext tupleDec() {
-			return getRuleContext(TupleDecContext.class,0);
+		public TuplaDecContext tuplaDec() {
+			return getRuleContext(TuplaDecContext.class,0);
 		}
 		public NewTypeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -566,7 +566,7 @@ public class gramParser extends Parser {
 			case TK_PC_TUPLA:
 				{
 				setState(128);
-				tupleDec();
+				tuplaDec();
 				}
 				break;
 			default:
@@ -711,7 +711,7 @@ public class gramParser extends Parser {
 		return _localctx;
 	}
 
-	public static class TupleDecContext extends ParserRuleContext {
+	public static class TuplaDecContext extends ParserRuleContext {
 		public TerminalNode TK_PC_TUPLA() { return getToken(gramParser.TK_PC_TUPLA, 0); }
 		public TerminalNode TK_PC_FTUPLA() { return getToken(gramParser.TK_PC_FTUPLA, 0); }
 		public List<BasicTypeContext> basicType() {
@@ -724,35 +724,35 @@ public class gramParser extends Parser {
 		public TerminalNode TK_IDENTIFIER(int i) {
 			return getToken(gramParser.TK_IDENTIFIER, i);
 		}
-		public TupleDecContext(ParserRuleContext parent, int invokingState) {
+		public TuplaDecContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_tupleDec; }
+		@Override public int getRuleIndex() { return RULE_tuplaDec; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof gramListener ) ((gramListener)listener).enterTupleDec(this);
+			if ( listener instanceof gramListener ) ((gramListener)listener).enterTuplaDec(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof gramListener ) ((gramListener)listener).exitTupleDec(this);
+			if ( listener instanceof gramListener ) ((gramListener)listener).exitTuplaDec(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof gramVisitor ) return ((gramVisitor<? extends T>)visitor).visitTupleDec(this);
+			if ( visitor instanceof gramVisitor ) return ((gramVisitor<? extends T>)visitor).visitTuplaDec(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final TupleDecContext tupleDec() throws RecognitionException {
-		TupleDecContext _localctx = new TupleDecContext(_ctx, getState());
-		enterRule(_localctx, 16, RULE_tupleDec);
+	public final TuplaDecContext tuplaDec() throws RecognitionException {
+		TuplaDecContext _localctx = new TuplaDecContext(_ctx, getState());
+		enterRule(_localctx, 16, RULE_tuplaDec);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(143);
 			match(TK_PC_TUPLA);
-			setState(147);
+			setState(147); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
@@ -764,7 +764,7 @@ public class gramParser extends Parser {
 				match(TK_IDENTIFIER);
 				}
 				}
-				setState(149);
+				setState(149); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TK_PC_INT) | (1L << TK_PC_REAL) | (1L << TK_PC_CHAR) | (1L << TK_PC_BOOL))) != 0) );
@@ -1454,7 +1454,7 @@ public class gramParser extends Parser {
 			setState(243);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TK_PC_ACCIO) | (1L << TK_PC_SI) | (1L << TK_PC_PER) | (1L << TK_PC_MENTRE) | (1L << TK_PC_READ) | (1L << TK_PC_WRITE))) != 0) || _la==TK_IDENTIFIER) {
+			while (((((_la - 22)) & ~0x3f) == 0 && ((1L << (_la - 22)) & ((1L << (TK_PC_SI - 22)) | (1L << (TK_PC_PER - 22)) | (1L << (TK_PC_MENTRE - 22)) | (1L << (TK_PC_READ - 22)) | (1L << (TK_PC_WRITE - 22)) | (1L << (TK_IDENTIFIER - 22)))) != 0)) {
 				{
 				{
 				setState(240);
@@ -1570,7 +1570,7 @@ public class gramParser extends Parser {
 			setState(263);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TK_PC_ACCIO) | (1L << TK_PC_SI) | (1L << TK_PC_PER) | (1L << TK_PC_MENTRE) | (1L << TK_PC_READ) | (1L << TK_PC_WRITE))) != 0) || _la==TK_IDENTIFIER) {
+			while (((((_la - 22)) & ~0x3f) == 0 && ((1L << (_la - 22)) & ((1L << (TK_PC_SI - 22)) | (1L << (TK_PC_PER - 22)) | (1L << (TK_PC_MENTRE - 22)) | (1L << (TK_PC_READ - 22)) | (1L << (TK_PC_WRITE - 22)) | (1L << (TK_IDENTIFIER - 22)))) != 0)) {
 				{
 				{
 				setState(260);
@@ -1767,7 +1767,7 @@ public class gramParser extends Parser {
 			setState(286);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TK_PC_ACCIO) | (1L << TK_PC_SI) | (1L << TK_PC_PER) | (1L << TK_PC_MENTRE) | (1L << TK_PC_READ) | (1L << TK_PC_WRITE))) != 0) || _la==TK_IDENTIFIER) {
+			while (((((_la - 22)) & ~0x3f) == 0 && ((1L << (_la - 22)) & ((1L << (TK_PC_SI - 22)) | (1L << (TK_PC_PER - 22)) | (1L << (TK_PC_MENTRE - 22)) | (1L << (TK_PC_READ - 22)) | (1L << (TK_PC_WRITE - 22)) | (1L << (TK_IDENTIFIER - 22)))) != 0)) {
 				{
 				{
 				setState(283);
@@ -1788,7 +1788,7 @@ public class gramParser extends Parser {
 				setState(293);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TK_PC_ACCIO) | (1L << TK_PC_SI) | (1L << TK_PC_PER) | (1L << TK_PC_MENTRE) | (1L << TK_PC_READ) | (1L << TK_PC_WRITE))) != 0) || _la==TK_IDENTIFIER) {
+				while (((((_la - 22)) & ~0x3f) == 0 && ((1L << (_la - 22)) & ((1L << (TK_PC_SI - 22)) | (1L << (TK_PC_PER - 22)) | (1L << (TK_PC_MENTRE - 22)) | (1L << (TK_PC_READ - 22)) | (1L << (TK_PC_WRITE - 22)) | (1L << (TK_IDENTIFIER - 22)))) != 0)) {
 					{
 					{
 					setState(290);
@@ -1879,7 +1879,7 @@ public class gramParser extends Parser {
 			setState(310);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TK_PC_ACCIO) | (1L << TK_PC_SI) | (1L << TK_PC_PER) | (1L << TK_PC_MENTRE) | (1L << TK_PC_READ) | (1L << TK_PC_WRITE))) != 0) || _la==TK_IDENTIFIER) {
+			while (((((_la - 22)) & ~0x3f) == 0 && ((1L << (_la - 22)) & ((1L << (TK_PC_SI - 22)) | (1L << (TK_PC_PER - 22)) | (1L << (TK_PC_MENTRE - 22)) | (1L << (TK_PC_READ - 22)) | (1L << (TK_PC_WRITE - 22)) | (1L << (TK_IDENTIFIER - 22)))) != 0)) {
 				{
 				{
 				setState(307);
@@ -1953,7 +1953,7 @@ public class gramParser extends Parser {
 			setState(321);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TK_PC_ACCIO) | (1L << TK_PC_SI) | (1L << TK_PC_PER) | (1L << TK_PC_MENTRE) | (1L << TK_PC_READ) | (1L << TK_PC_WRITE))) != 0) || _la==TK_IDENTIFIER) {
+			while (((((_la - 22)) & ~0x3f) == 0 && ((1L << (_la - 22)) & ((1L << (TK_PC_SI - 22)) | (1L << (TK_PC_PER - 22)) | (1L << (TK_PC_MENTRE - 22)) | (1L << (TK_PC_READ - 22)) | (1L << (TK_PC_WRITE - 22)) | (1L << (TK_IDENTIFIER - 22)))) != 0)) {
 				{
 				{
 				setState(318);
@@ -1980,7 +1980,7 @@ public class gramParser extends Parser {
 	}
 
 	public static class AccioContext extends ParserRuleContext {
-		public TerminalNode TK_PC_ACCIO() { return getToken(gramParser.TK_PC_ACCIO, 0); }
+		public TerminalNode TK_IDENTIFIER() { return getToken(gramParser.TK_IDENTIFIER, 0); }
 		public TerminalNode TK_OP_PAR_OPEN() { return getToken(gramParser.TK_OP_PAR_OPEN, 0); }
 		public TerminalNode TK_OP_PAR_CLOSE() { return getToken(gramParser.TK_OP_PAR_CLOSE, 0); }
 		public TerminalNode TK_SEP_SEMICOLON() { return getToken(gramParser.TK_SEP_SEMICOLON, 0); }
@@ -2021,7 +2021,7 @@ public class gramParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(326);
-			match(TK_PC_ACCIO);
+			match(TK_IDENTIFIER);
 			setState(327);
 			match(TK_OP_PAR_OPEN);
 			setState(336);
@@ -2250,51 +2250,49 @@ public class gramParser extends Parser {
 			{
 			setState(367);
 			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case TK_IDENTIFIER:
+			switch ( getInterpreter().adaptivePredict(_input,38,_ctx) ) {
+			case 1:
 				{
 				setState(360);
 				assign();
 				}
 				break;
-			case TK_PC_SI:
+			case 2:
 				{
 				setState(361);
 				if_rule();
 				}
 				break;
-			case TK_PC_PER:
+			case 3:
 				{
 				setState(362);
 				for_rule();
 				}
 				break;
-			case TK_PC_MENTRE:
+			case 4:
 				{
 				setState(363);
 				while_rule();
 				}
 				break;
-			case TK_PC_ACCIO:
+			case 5:
 				{
 				setState(364);
 				accio();
 				}
 				break;
-			case TK_PC_READ:
+			case 6:
 				{
 				setState(365);
 				read();
 				}
 				break;
-			case TK_PC_WRITE:
+			case 7:
 				{
 				setState(366);
 				write();
 				}
 				break;
-			default:
-				throw new NoViableAltException(this);
 			}
 			}
 		}
@@ -3288,7 +3286,7 @@ public class gramParser extends Parser {
 		"-\3\2\2\2\u013d\u013e\7!\2\2\u013e\u013f\5@!\2\u013f\u0143\7\37\2\2\u0140"+
 		"\u0142\5\66\34\2\u0141\u0140\3\2\2\2\u0142\u0145\3\2\2\2\u0143\u0141\3"+
 		"\2\2\2\u0143\u0144\3\2\2\2\u0144\u0146\3\2\2\2\u0145\u0143\3\2\2\2\u0146"+
-		"\u0147\7\"\2\2\u0147/\3\2\2\2\u0148\u0149\7\6\2\2\u0149\u0152\7C\2\2\u014a"+
+		"\u0147\7\"\2\2\u0147/\3\2\2\2\u0148\u0149\7I\2\2\u0149\u0152\7C\2\2\u014a"+
 		"\u014f\5@!\2\u014b\u014c\7G\2\2\u014c\u014e\5@!\2\u014d\u014b\3\2\2\2"+
 		"\u014e\u0151\3\2\2\2\u014f\u014d\3\2\2\2\u014f\u0150\3\2\2\2\u0150\u0153"+
 		"\3\2\2\2\u0151\u014f\3\2\2\2\u0152\u014a\3\2\2\2\u0152\u0153\3\2\2\2\u0153"+

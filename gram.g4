@@ -163,7 +163,7 @@ newType: TK_IDENTIFIER TK_OP_COLON (basicType | vectorDec | tuplaDec) TK_SEP_SEM
 
 basicType: (TK_PC_INT | TK_PC_REAL | TK_PC_CHAR | TK_PC_BOOL);
 vectorDec: TK_PC_VECTOR basicType TK_PC_MIDA TK_PC_INT (TK_PC_INICI TK_PC_INT)?;
-tupleDec: TK_PC_TUPLA (basicType TK_IDENTIFIER)+ TK_PC_FTUPLA;
+tuplaDec: TK_PC_TUPLA (basicType TK_IDENTIFIER)+ TK_PC_FTUPLA;
 
 constBlock: TK_PC_CONSTANTS (basicType TK_IDENTIFIER TK_OP_ASSIGN (constValue)TK_SEP_SEMICOLON)* TK_PC_FCONSTANTS; //preguntar si ha de ser * com al enunciat o + (una o m'es, obligar a no declarar block si no luses)
 

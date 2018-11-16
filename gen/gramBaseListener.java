@@ -111,13 +111,13 @@ public class gramBaseListener implements gramListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTupleDec(gramParser.TupleDecContext ctx) { }
+	@Override public void enterTuplaDec(gramParser.TuplaDecContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTupleDec(gramParser.TupleDecContext ctx) { }
+	@Override public void exitTuplaDec(gramParser.TuplaDecContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

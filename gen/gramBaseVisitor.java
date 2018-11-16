@@ -72,7 +72,7 @@ public class gramBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements g
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitTupleDec(gramParser.TupleDecContext ctx) { return visitChildren(ctx); }
+	@Override public T visitTuplaDec(gramParser.TuplaDecContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

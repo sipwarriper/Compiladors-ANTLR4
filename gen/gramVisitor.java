@@ -58,11 +58,11 @@ public interface gramVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVectorDec(gramParser.VectorDecContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link gramParser#tupleDec}.
+	 * Visit a parse tree produced by {@link gramParser#tuplaDec}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitTupleDec(gramParser.TupleDecContext ctx);
+	T visitTuplaDec(gramParser.TuplaDecContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link gramParser#constBlock}.
 	 * @param ctx the parse tree

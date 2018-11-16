@@ -87,15 +87,15 @@ public interface gramListener extends ParseTreeListener {
 	 */
 	void exitVectorDec(gramParser.VectorDecContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link gramParser#tupleDec}.
+	 * Enter a parse tree produced by {@link gramParser#tuplaDec}.
 	 * @param ctx the parse tree
 	 */
-	void enterTupleDec(gramParser.TupleDecContext ctx);
+	void enterTuplaDec(gramParser.TuplaDecContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link gramParser#tupleDec}.
+	 * Exit a parse tree produced by {@link gramParser#tuplaDec}.
 	 * @param ctx the parse tree
 	 */
-	void exitTupleDec(gramParser.TupleDecContext ctx);
+	void exitTuplaDec(gramParser.TuplaDecContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link gramParser#constBlock}.
 	 * @param ctx the parse tree
