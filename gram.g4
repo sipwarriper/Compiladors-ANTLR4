@@ -81,6 +81,7 @@ TK_PC_WRITELN: 'escriureln';
 fragment DIGIT: '1'..'9';
 fragment LETTER: 'a'..'z';
 fragment CAPLETTER: 'A'..'Z';
+fragment TK_OP_QUOTE: '"';
 
 
 
@@ -92,7 +93,7 @@ TK_CONST_REAL: (('0.' | DIGIT* '.') ('0' | DIGIT)+) ('E' '-'? DIGIT ('0' | DIGIT
 
 TK_CONST_BOOL: 'false' | 'true';
 
-TK_CONST_INT: (DIGIT ('0' | DIGIT)*) | '0'+;
+TK_CONST_INT: (('0' | DIGIT)+);
 
 
 //------OPERADORS-----------------------------------------
@@ -119,7 +120,6 @@ TK_OP_VECTOR_OPEN: '[';
 TK_OP_VECTOR_CLOSE: ']';
 TK_OP_TUPLE: '.';
 TK_OP_ASSIGN: ':=';
-TK_OP_QUOTE: '"';
 
 TK_OP_PAR_OPEN: '(';
 TK_OP_PAR_CLOSE: ')';
@@ -139,11 +139,12 @@ TK_SEP_SEMICOLON: ';';
 
 //----------Identificadors
 
-TK_STRING_LITERAL: TK_OP_QUOTE ((' ' .. '~' ) | '\\' '\'') * TK_OP_QUOTE;
+//TK_STRING_LITERAL: '"' ((' ' .. '~' ) | '\\' '\'') * '"';
+TK_STRING_LITERAL: TK_OP_QUOTE (~('"'|'\n'|'\\') | ('\\"'))* TK_OP_QUOTE;
 TK_IDENTIFIER: (LETTER | CAPLETTER) (LETTER|CAPLETTER|DIGIT|'0'|'_' )*;
 
 
-testingRule: TK_STRING_LITERAL EOF; //regla per testejar
+testingRule: TK_MULTILINE_COMMENTS EOF; //regla per testejar
 
 
 // Analisis sintactic
@@ -241,17 +242,17 @@ func: TK_IDENTIFIER TK_OP_PAR_OPEN (expr (TK_SEP_COMMA expr)*)? TK_OP_PAR_CLOSE;
 ***  & |
 ***  if −then−else
 */
-expr: (logicsDown TK_OP_QUESTION_MARK expr TK_OP_COLON expr) | logicsDown;
+expr: (logicsDown (TK_OP_QUESTION_MARK logicsDown TK_OP_COLON logicsDown)*) | logicsDown;
 
-logicsDown: (logicUp (TK_OP_AND | TK_OP_OR) logicsDown) | logicUp;
+logicsDown: (logicUp ((TK_OP_AND | TK_OP_OR) logicUp)*) | logicUp;
 
-logicUp: (sum (TK_OP_EQ | TK_OP_DIFF | TK_OP_GT | TK_OP_LT | TK_OP_LOET | TK_OP_GOET) logicUp) | sum;
+logicUp: (sum ((TK_OP_EQ | TK_OP_DIFF | TK_OP_GT | TK_OP_LT | TK_OP_LOET | TK_OP_GOET) sum)*) | sum;
 
-sum: (mult (TK_OP_SUMA | TK_OP_RESTA) sum)|mult;
+sum: (mult ((TK_OP_SUMA | TK_OP_RESTA) mult)*)|mult;
 
-mult: (neg (TK_OP_MULT | TK_OP_REALDIV | TK_OP_INTDIV | TK_OP_MOD) mult)|neg;
+mult: (neg ((TK_OP_MULT | TK_OP_REALDIV | TK_OP_INTDIV | TK_OP_MOD) neg)*) | neg;
 
-neg: ((TK_OP_NEG | TK_OP_MINUS) neg)| value;
+neg: ((TK_OP_NEG | TK_OP_MINUS) value)| value;
 
 value: constValue|TK_IDENTIFIER|tuple|vector|func|parenthesis;
 
