@@ -9,7 +9,10 @@ grammar gram;
 @header{
     import java.io.*;
 }
-
+options
+{
+    language = Java;
+}
 @parser::members{
      SymTable<Registre> TS = new SymTable<Registre>(1000);
      boolean error = false;
@@ -258,6 +261,12 @@ func: TK_IDENTIFIER TK_OP_PAR_OPEN (expr (TK_SEP_COMMA expr)*)? TK_OP_PAR_CLOSE;
 ***  & |
 ***  if −then−else
 */
+
+
+// expr returns [char tipus]:  // significa que la regla expr torna un char, que contindrà el tipus
+//
+
+
 expr: (logicsDown (TK_OP_QUESTION_MARK logicsDown TK_OP_COLON logicsDown)*) | logicsDown;
 
 logicsDown: (logicUp ((TK_OP_AND | TK_OP_OR) logicUp)*) | logicUp;
