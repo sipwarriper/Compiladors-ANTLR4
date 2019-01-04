@@ -6,8 +6,24 @@ grammar gram;
 */
 
 
+@header{
+    import java.io.*;
+}
+
+@parser::members{
+     SymTable<Registre> TS = new SymTable<Registre>(1000);
+     boolean error = false;
+
+     //override method
+     public void notifyErrorListeners(Token offendingToken, String msg, RecognitionException e)    {
+          super.notifyErrorListeners(offendingToken,msg,e);
+          error=true;
+     }
+}
+
+
 //Regla sintactica: qualsevol token diferent de EOF
-inici: (~EOF)+;
+//inici: (~EOF)+;
 
 
 
@@ -144,7 +160,7 @@ TK_STRING_LITERAL: TK_OP_QUOTE (~('"'|'\n'|'\\') | ('\\"'))* TK_OP_QUOTE;
 TK_IDENTIFIER: (LETTER | CAPLETTER) (LETTER|CAPLETTER|DIGIT|'0'|'_' )*;
 
 
-testingRule: TK_MULTILINE_COMMENTS EOF; //regla per testejar
+//testingRule: TK_MULTILINE_COMMENTS EOF; //regla per testejar
 
 
 // Analisis sintactic
