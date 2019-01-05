@@ -3,7 +3,7 @@ import java.io.*;
 
 import org.antlr.v4.runtime.*;
 
-public class lansC {
+public class LansCompiler {
     public static void main(String args[]) throws Exception{
         if(args.length == 0){
             System.out.println("Es requereix un fitxer LANS");
@@ -20,6 +20,6 @@ public class lansC {
             //probablament per ficarli el nom que vole
             //p.setLANSClassFile(classfile);
         }
-        p.program();
+        p.expr();
     }
 }

@@ -1,18 +1,15 @@
 grammar gram;
 
-/*
-******************* Autors: Lluís Trilla i Ismael El Habri
-******************* la regla inicial del programa és la regla program *******************
-*/
-
-
 @header{
     import java.io.*;
 }
-options
-{
-    language = Java;
-}
+
+
+
+//******************* Autors: Lluís Trilla i Ismael El Habri
+//******************* la regla inicial del programa es la regla program
+
+
 @parser::members{
      SymTable<Registre> TS = new SymTable<Registre>(1000);
      boolean error = false;
@@ -245,9 +242,11 @@ sentence: (assign|if_rule|for_rule|while_rule|accio|read|write|writeln) ;
 *** ternari: a? b:c on a, b i c son expressions
 */
 
-constValue: TK_CONST_INT | TK_CONST_REAL | TK_CONST_CHAR | TK_CONST_BOOL;
-//noms tipus
-// '
+constValue returns [char tipus]:
+    a=TK_CONST_INT {$tipus = 'E';}
+    | b=TK_CONST_REAL {$tipus = 'R';}
+    | c=TK_CONST_CHAR {$tipus = 'C';}
+    | d=TK_CONST_BOOL {$tipus = 'B';};
 
 tuple: TK_IDENTIFIER TK_OP_TUPLE TK_IDENTIFIER;
 
@@ -267,30 +266,107 @@ func: TK_IDENTIFIER TK_OP_PAR_OPEN (expr (TK_SEP_COMMA expr)*)? TK_OP_PAR_CLOSE;
 
 // expr returns [char tipus]:  // significa que la regla expr torna un char, que contindrà el tipus
 //
+//expr: (logicsDown (TK_OP_QUESTION_MARK logicsDown TK_OP_COLON logicsDown)*) | logicsDown;
+//
+//logicsDown: (logicUp ((TK_OP_AND | TK_OP_OR) logicUp)*) | logicUp;
 
-
-expr returns [char tipus]
-    : (boolea=logicsDown
-        (TK_OP_QUESTION_MARK t1 = logicsDown {$tipus = t1.tipus;}
-        TK_OP_COLON t2 = logicsDown
-            {
-                if($t1.tipus != $t2.tipus){
+expr returns [char tipus]:
+    (boolea=logicsDown
+        (s=TK_OP_QUESTION_MARK t1 = logicsDown {
+            $tipus = $t1.tipus;
+            if($boolea.tipus != 'B'){ //la condició ha de ser booleana
+                error = true;
+                System.out.println("Error de tipus detectat a la linia " + $s.line + ": La condició d'un ternari ha de ser booleana");
+            }
+        }
+        s=TK_OP_COLON t2 = logicsDown {
+                if($t1.tipus != $t2.tipus && !(($t1.tipus == 'E' && $t2.tipus == 'R')||($t1.tipus == 'R' && $t2.tipus == 'E'))){
+                //cast de real a enter
                     error = true;
-                    System.out.println("Error de tipus detectat a la linia " + $s.line);
+                    System.out.println("Error de tipus detectat a la linia " + $s.line + ": Els tipus del ternari no casen");
                 }
+                System.out.println("Condicio: " + $boolea.text + " tipus: " + $boolea.tipus);
+                System.out.println("t1: " + $t1.text + " tipus: " + $t1.tipus);
+                System.out.println("t2: " + $t2.text + " tipus: " + $t2.tipus);
             })*)
     | t1 = logicsDown {$tipus = $t1.tipus;};
 
-logicsDown: (logicUp ((TK_OP_AND | TK_OP_OR) logicUp)*) | logicUp;
+logicsDown returns [char tipus]:
+    (t1=logicUp{$tipus = 'B';}
+    (s=(TK_OP_AND | TK_OP_OR) t2=logicUp {
+                 if($t1.tipus != 'B' && $t2.tipus != 'B'){
+                 //cast de real a enter
+                     error = true;
+                     System.out.println("Error de tipus detectat a la linia " + $s.line + ": Els tipus de operació lògica no casen");
+                 }
+             })+)
+    | t=logicUp{$tipus = $t.tipus;};
 
-logicUp: (sum ((TK_OP_EQ | TK_OP_DIFF | TK_OP_GT | TK_OP_LT | TK_OP_LOET | TK_OP_GOET) sum)*) | sum;
+logicUp returns [char tipus]:
+    (t1=sum {$tipus = 'B';}
+        (s=(TK_OP_EQ | TK_OP_DIFF | TK_OP_GT | TK_OP_LT | TK_OP_LOET | TK_OP_GOET) t2=sum {
+              if($s.text.equals("==") || $s.text.equals("!=")) {
+                if(($t1.tipus != $t2.tipus) && !(($t1.tipus == 'E' && $t2.tipus == 'R')||($t1.tipus == 'R' && $t2.tipus == 'E'))){
+                    error = true;
+                    System.out.println("Error de tipus detectat a la linia " + $s.line +": El tipus del comparador lògic no casen");
+                }
+              } else if(($t1.tipus != 'E' || $t1.tipus != 'R') && ($t2.tipus != 'E' || $t2.tipus != 'R')){
+                //nomes es pot usar en reals i enters, aixi que si son diferents ferem casting a real.
+                    error = true;
+                    System.out.println("Error de tipus detectat a la linia " + $s.line + ": El tipus del comparador lògic no casen");
+              }
+          })+)
+        | t=sum{$tipus = $t.tipus;};
 
-sum: (mult ((TK_OP_SUMA | TK_OP_RESTA) mult)*)|mult;
+sum returns [char tipus]:
+    (t1=mult(s=(TK_OP_SUMA | TK_OP_RESTA) t2=mult{
+          if(($t1.tipus == 'E' || $t1.tipus == 'R') && ($t2.tipus == 'R' || $t2.tipus == 'E')){
+              $tipus = 'R';
+          } else if($t1.tipus == $t2.tipus && ($t1.tipus == 'E' || $t1.tipus == 'R')){
+              $tipus = $t1.tipus;
+          } else{
+              error = true;
+              System.out.println("Error de tipus detectat a la linia " + $s.line + ": El tipus de la suma/resta no casen");
+          }
+    })+)
+    | t=mult{$tipus = $t.tipus;};
 
-mult: (neg ((TK_OP_MULT | TK_OP_REALDIV | TK_OP_INTDIV | TK_OP_MOD) neg)*) | neg;
+mult returns [char tipus]:
+    (t1=neg(s=(TK_OP_MULT | TK_OP_REALDIV | TK_OP_INTDIV | TK_OP_MOD) t2=neg{
+          if(($s.text.equals("%") || $s.text.equals("\\")) && ($t1.tipus == 'E' && $t2.tipus == 'E')) {
+                $tipus = 'E';
+          } else if ($s.text.equals("/") && ($t1.tipus == 'E' || $t1.tipus == 'E') && ($t1.tipus == 'E' || $t1.tipus == 'E')) {
+                $tipus = 'R';
+          } else if ($s.text.equals("*") && ($t1.tipus == 'E' || $t1.tipus == 'E') && ($t1.tipus == 'E' || $t1.tipus == 'E')) {
+                $tipus = 'R';
+          } else if ($s.text.equals("*") && $t1.tipus == $t2.tipus && ($t1.tipus == 'E' || $t2.tipus == 'R')) {
+                $tipus = $t1.tipus;
+          } else {
+                error = true;
+                System.out.println("Error de tipus detectat a la linia " + $s.line + ": El tipus de " + $s.text +" no casen");
+          }
+      })+)
+    | t=neg {$tipus = $t.tipus;};
 
-neg: ((TK_OP_NEG | TK_OP_MINUS) value)| value;
+neg returns [char tipus]:
+    (s=(TK_OP_NEG | TK_OP_MINUS) t=value{
+        $tipus = $t.tipus;
+        if(($s.text.equals("~") && ($t.tipus != 'E' || $t.tipus != 'R' )) || ($s.text.equals("no") && $t.tipus != 'B')){
+              error = true;
+              System.out.println("Error de tipus detectat a la linia " + $s.line + ": El tipus del unari és incorrecte");
+        }
+    })
+    | t=value {$tipus=$t.tipus;};
 
-value: constValue|TK_IDENTIFIER|tuple|vector|func|parenthesis;
+value returns [char tipus]:
+//TODO: semantic value incomplet
+    t1 = constValue {$tipus = $t1.tipus;}
+    |TK_IDENTIFIER
+    |tuple
+    |vector
+    |func
+    | t= parenthesis {$tipus = $t.tipus;};
 
-parenthesis: TK_OP_PAR_OPEN expr TK_OP_PAR_CLOSE;
+parenthesis returns [char tipus]: TK_OP_PAR_OPEN t=expr {
+    $tipus = $t.tipus;
+} TK_OP_PAR_CLOSE;
