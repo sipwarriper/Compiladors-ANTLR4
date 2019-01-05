@@ -246,6 +246,8 @@ sentence: (assign|if_rule|for_rule|while_rule|accio|read|write|writeln) ;
 */
 
 constValue: TK_CONST_INT | TK_CONST_REAL | TK_CONST_CHAR | TK_CONST_BOOL;
+//noms tipus
+// '
 
 tuple: TK_IDENTIFIER TK_OP_TUPLE TK_IDENTIFIER;
 
@@ -267,7 +269,17 @@ func: TK_IDENTIFIER TK_OP_PAR_OPEN (expr (TK_SEP_COMMA expr)*)? TK_OP_PAR_CLOSE;
 //
 
 
-expr: (logicsDown (TK_OP_QUESTION_MARK logicsDown TK_OP_COLON logicsDown)*) | logicsDown;
+expr returns [char tipus]
+    : (boolea=logicsDown
+        (TK_OP_QUESTION_MARK t1 = logicsDown {$tipus = t1.tipus;}
+        TK_OP_COLON t2 = logicsDown
+            {
+                if($t1.tipus != $t2.tipus){
+                    error = true;
+                    System.out.println("Error de tipus detectat a la linia " + $s.line);
+                }
+            })*)
+    | t1 = logicsDown {$tipus = $t1.tipus;};
 
 logicsDown: (logicUp ((TK_OP_AND | TK_OP_OR) logicUp)*) | logicUp;
 
