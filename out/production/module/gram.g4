@@ -212,17 +212,37 @@ type: TK_IDENTIFIER | basicType;
 
 assign: (TK_IDENTIFIER| tuple | vector)TK_OP_ASSIGN expr TK_SEP_SEMICOLON;
 
-if_rule: TK_PC_SI expr TK_PC_LLAVORS
+
+if_rule: s=TK_PC_SI t1=expr{
+              if($t1.tipus != 'B'){ //la condició ha de ser booleana
+                  error = true;
+                  System.out.println("Error de tipus detectat a la linia " + $s.line + ":la condició del if ha de ser booleana." + $t1.text);
+              }
+          } TK_PC_LLAVORS
             sentence*
             (TK_PC_ALTRAMENT sentence*)?
             TK_PC_FSI;
 
-for_rule: TK_PC_PER TK_IDENTIFIER TK_PC_DE expr TK_PC_FINS expr TK_PC_FER
+for_rule: s=TK_PC_PER TK_IDENTIFIER TK_PC_DE t1=expr TK_PC_FINS t2=expr{
+         if($t1.tipus != 'E' || $t2.tipus !='E'){
+             error = true;
+             System.out.println("Error de tipus detectat a la linia " + $s.line + ":els valors dels intervals del for han de ser enters");
+         }
+     } TK_PC_FER
     sentence*
     TK_PC_FPER;
-while_rule: TK_PC_MENTRE expr TK_PC_FER
+
+while_rule: s=TK_PC_MENTRE t1 = expr{
+          if($t1.tipus != 'B'){ //la condició ha de ser booleana
+              error = true;
+              System.out.println("Error de tipus detectat a la linia " + $s.line + ":la condició del while ha de ser booleana.");
+          }
+      }TK_PC_FER
      sentence*
      TK_PC_FMENTRE;
+
+
+
 accio: TK_IDENTIFIER TK_OP_PAR_OPEN (expr (TK_SEP_COMMA expr)*)? TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
 
 read: TK_PC_READ TK_OP_PAR_OPEN TK_IDENTIFIER TK_OP_PAR_CLOSE TK_SEP_SEMICOLON;
@@ -264,11 +284,6 @@ func: TK_IDENTIFIER TK_OP_PAR_OPEN (expr (TK_SEP_COMMA expr)*)? TK_OP_PAR_CLOSE;
 */
 
 
-// expr returns [char tipus]:  // significa que la regla expr torna un char, que contindrà el tipus
-//
-//expr: (logicsDown (TK_OP_QUESTION_MARK logicsDown TK_OP_COLON logicsDown)*) | logicsDown;
-//
-//logicsDown: (logicUp ((TK_OP_AND | TK_OP_OR) logicUp)*) | logicUp;
 
 expr returns [char tipus]:
     (boolea=logicsDown
@@ -285,10 +300,7 @@ expr returns [char tipus]:
                     error = true;
                     System.out.println("Error de tipus detectat a la linia " + $s.line + ": Els tipus del ternari no casen");
                 }
-                System.out.println("Condicio: " + $boolea.text + " tipus: " + $boolea.tipus);
-                System.out.println("t1: " + $t1.text + " tipus: " + $t1.tipus);
-                System.out.println("t2: " + $t2.text + " tipus: " + $t2.tipus);
-            })*)
+            })+)
     | t1 = logicsDown {$tipus = $t1.tipus;};
 
 logicsDown returns [char tipus]:
