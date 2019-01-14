@@ -70,9 +70,6 @@ Per cada tipus, hi ha un conjunt de informació que s'ha de guardar, apart del n
     * tipus real
 * tupla
     * llista amb els camps de la tupla (nom i tipus)
-* vector
-    * mida
-    * inici (si no s'ha definit, 0)
 * funció/acció
     * return (void en cas de acció)
     * llista amb els tipus dels paràmetres
