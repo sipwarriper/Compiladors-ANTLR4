@@ -20,6 +20,6 @@ public class LansCompiler {
             //probablament per ficarli el nom que vole
             //p.setLANSClassFile(classfile);
         }
-        p.expr();
+        p.constBlock();
     }
 }

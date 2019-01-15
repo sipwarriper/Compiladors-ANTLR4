@@ -2,6 +2,9 @@ grammar gram;
 
 @header{
     import java.io.*;
+    import javafx.util.Pair;
+    import java.util.Vector;
+
 }
 
 
@@ -185,15 +188,74 @@ main: TK_PC_PROGRAMA TK_IDENTIFIER varBlock? sentence* TK_PC_FPROGRAMA; //nse si
 typeBlock: TK_PC_TIPUS newType* TK_PC_FTIPUS;
 
 
-newType: TK_IDENTIFIER TK_OP_COLON (basicType | vectorDec | tuplaDec) TK_SEP_SEMICOLON;
+newType @init{Registre registre = new Registre();} : id=TK_IDENTIFIER TK_OP_COLON (
+    reg = basicType {$reg.reg.putLexema($id.text); registre = $reg.reg;}
+    | reg2 = vectorDec {$reg2.reg.putLexema($id.text); registre = $reg2.reg;}
+    | reg3 = tuplaDec {$reg3.reg.putLexema($id.text); registre = $reg3.reg;}
+    ) TK_SEP_SEMICOLON{
+        if(TS.existeix($id.text)){ //no podem tenir dos tipus amb el mateix nom!
+            error = true;
+            System.out.println("Error, dos tipus amb el mateix nom detectats a la linia " + $id.line);
+        }
+        else{
+            TS.inserir($id.text, registre);
+        }
+    };
 
-basicType: (TK_PC_INT | TK_PC_REAL | TK_PC_CHAR | TK_PC_BOOL);
-vectorDec: TK_PC_VECTOR basicType TK_PC_MIDA TK_CONST_INT (TK_PC_INICI TK_CONST_INT)?;
-tuplaDec: TK_PC_TUPLA (basicType TK_IDENTIFIER TK_SEP_SEMICOLON)+ TK_PC_FTUPLA;
+basicType returns [Registre reg]:
+    TK_PC_INT { $reg = new Registre("", "enter"); }
+    | TK_PC_REAL { $reg = new Registre("", "real"); }
+    | TK_PC_CHAR { $reg = new Registre("", "car"); }
+    | TK_PC_BOOL { $reg = new Registre("", "boolea"); };
 
-constBlock: TK_PC_CONSTANTS (basicType TK_IDENTIFIER TK_OP_ASSIGN (constValue| TK_STRING_LITERAL)TK_SEP_SEMICOLON)* TK_PC_FCONSTANTS; //preguntar si ha de ser * com al enunciat o + (una o m'es, obligar a no declarar block si no luses)
 
-varBlock: TK_PC_VARIABLES (type TK_IDENTIFIER TK_SEP_SEMICOLON)* TK_PC_FVARIABLES;
+vectorDec returns [Registre reg]: TK_PC_VECTOR bt=basicType{
+    $reg = new Registre ("", $bt.reg.getTipus(), "vector");
+} TK_PC_MIDA TK_CONST_INT (TK_PC_INICI TK_CONST_INT)?;
+
+
+tuplaDec returns [Registre reg] @init{Vector<Pair<String,String>> camps = new Vector<Pair<String,String>>(10); }: TK_PC_TUPLA (bt = basicType id = TK_IDENTIFIER TK_SEP_SEMICOLON{
+    camps.add(new Pair<>($bt.reg.getTipus(), $id.text));
+})+ TK_PC_FTUPLA{
+    $reg = new Registre("", null, "tupla");
+    $reg.putCampsAddicionals(camps); };
+
+constBlock: TK_PC_CONSTANTS (bt=basicType id=TK_IDENTIFIER TK_OP_ASSIGN c = constValue{
+    char tipusCar = $bt.reg.getTipus().toUpperCase().charAt(0);
+    if((tipusCar == $c.tipus || (tipusCar == 'R' && $c.tipus == 'E') ) && !TS.existeix($id.text)){
+        Registre registre = new Registre($id.text, $bt.reg.getTipus(), "const");
+        TS.inserir($id.text, registre);
+    }
+    else if(TS.existeix($id.text)){
+        error = true;
+        System.out.println("Error, dos constants amb el mateix nom detectats a la linia " + $id.line);
+    }
+    else{
+        error = true;
+        System.out.println("Error de tipus a la linia " + $id.line + " càsting il·legal");
+    }
+} TK_SEP_SEMICOLON)* TK_PC_FCONSTANTS; //preguntar si ha de ser * com al enunciat o + (una o m'es, obligar a no declarar block si no luses)
+
+varBlock
+//@init{
+//     Registre rTest = new Registre ("UnAlias", "enter","alias");
+//     TS.inserir("UnAlias", rTest);
+//}
+: TK_PC_VARIABLES (t=type id=TK_IDENTIFIER TK_SEP_SEMICOLON{
+    if ($t.reg!=null){
+        String tipus = null;
+        if ($t.reg.getLexema().equals("")){ tipus = $t.reg.getTipus();}
+        else { tipus = $t.reg.getLexema();}
+        if(!TS.existeix($id.text)){
+            Registre registre = new Registre($id.text, tipus, "var");
+            TS.inserir($id.text, registre);
+        }
+        else{
+            error = true;
+            System.out.println("Error, dos variables amb el mateix nom detectats a la linia " + $id.line);
+        }
+    }
+})* TK_PC_FVARIABLES;
 
 funcDecBlock: (accioDec | funcDec)*;
 
@@ -208,7 +270,17 @@ funcImp:  TK_PC_FUNCIO TK_IDENTIFIER TK_OP_PAR_OPEN params? TK_OP_PAR_CLOSE TK_P
           varBlock? sentence*
           TK_PC_RETURN expr TK_SEP_SEMICOLON // es una expresio de tipus basic!
           TK_PC_FFUNCIO;
-type: TK_IDENTIFIER | basicType;
+
+
+type returns [Registre reg]: id = TK_IDENTIFIER {
+     if(!TS.existeix($id.text)){
+        error = true;
+        System.out.println("Error, "+ $id.text +" no existeix. Linia " + $id.line);
+     }
+     else {
+        $reg = TS.obtenir($id.text);
+     }
+    }| bt = basicType{$reg = $bt.reg;};
 
 assign: (TK_IDENTIFIER| tuple | vector)TK_OP_ASSIGN expr TK_SEP_SEMICOLON;
 
@@ -268,12 +340,44 @@ constValue returns [char tipus]:
     | c=TK_CONST_CHAR {$tipus = 'C';}
     | d=TK_CONST_BOOL {$tipus = 'B';};
 
-tuple: TK_IDENTIFIER TK_OP_TUPLE TK_IDENTIFIER;
+tuple returns [char tipus]: id=TK_IDENTIFIER TK_OP_TUPLE camp=TK_IDENTIFIER{
+    if(TS.existeix($id.text)){
+        Registre reg = TS.obtenir($id.text);
+        Vector<Pair<String,String>> camps = reg.getCampsAddicionals();
+        boolean trobat = false;
+        int i = 0;
+        Pair<String, String> c = null;
+        while (trobat != false && i < camps.size()){
+            c = camps.get(i);
+            if (c.getValue().equals($camp.text)) trobat = true;
+            i++;
+        }
+        if (!trobat) {
+            error = true;
+            System.out.println("Error: la tupla " + $id.text + " no te el camp " + $camp.text + " a la linea: " + $id.line);
+        }
+        else{
+            $tipus = c.getKey().toUpperCase().charAt(0);
+        }
+    }
+    else{
+        error = true;
+        System.out.println("Error: la tupla " + $id.text + " no existeix, a la linea: " + $id.line);
+    }
+};
 
-vector: s=TK_IDENTIFIER TK_OP_VECTOR_OPEN t1=expr{
+vector returns [char tipus]: id=TK_IDENTIFIER TK_OP_VECTOR_OPEN t1=expr{
          if($t1.tipus != 'E'){
              error = true;
-             System.out.println("Error de tipus detectat a la linia " + $s.line + ": els indexs de vectors han de ser enters.");
+             System.out.println("Error de tipus detectat a la linia " + $id.line + ": els indexs de vectors han de ser enters.");
+         }
+         if(TS.existeix($id.text)){
+            Registre reg = TS.obtenir($id.text);
+            $tipus = reg.getTipus().toUpperCase().charAt(0);
+         }
+         else{
+            error = true;
+            System.out.println("Error: el vector " + $id.text + " no existeix, a la linea: " + $id.line);
          }
      } TK_OP_VECTOR_CLOSE;
 
@@ -377,10 +481,26 @@ neg returns [char tipus]:
 
 value returns [char tipus]:
 //TODO: semantic value incomplet
+//TODO: provar id, tuple i vector
     t1 = constValue {$tipus = $t1.tipus;}
-    |TK_IDENTIFIER
-    |tuple
-    |vector
+    | id=TK_IDENTIFIER{
+        if(TS.existeix($id.text) && (TS.obtenir($id.text).getTipusLexema().equals("var") || TS.obtenir($id.text).getTipusLexema().equals("const"))){
+            Registre reg = TS.obtenir($id.text);
+            if(reg.getTipus().equals("enter") || reg.getTipus().equals("real") || reg.getTipus().equals("car") || reg.getTipus().equals("boolea")){
+                $tipus = reg.getTipus().toUpperCase().charAt(0);
+            }
+            else{ //tipus es un alias
+                Registre reg2 = TS.obtenir(reg.getTipus());
+                $tipus = reg2.getTipus().toUpperCase().charAt(0);
+            }
+        }
+        else{
+            error = true;
+            System.out.println("Error: " + $id.text + " no existeix: " + $id.line);
+        }
+    }
+    |t2 = tuple {$tipus = $t2.tipus;}
+    |t3 = vector {$tipus = $t3.tipus;}
     |func
     | t= parenthesis {$tipus = $t.tipus;};
 

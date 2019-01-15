@@ -1,0 +1,10 @@
+constants
+    enter constantEntera := 33;
+    real constantReal := 33;
+    boolea constantBooleana := true;
+    //zona incorrecte
+    enter constantDolenta := 33.3;
+    enter constantEntera := 30;
+    enter constantBooleana := true;
+
+fconstants

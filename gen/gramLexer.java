@@ -1,6 +1,9 @@
 // Generated from /home/sipwarriper/IdeaProjects/ANTLR4-Compiladors/src/gram.g4 by ANTLR 4.7
 
     import java.io.*;
+    import javafx.util.Pair;
+    import java.util.Vector;
+
 
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;

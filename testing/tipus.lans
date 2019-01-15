@@ -1,0 +1,18 @@
+tipus
+    socUnAlias: enter;
+    socUnVector: vector enter mida 10;
+    socUnaTupla: tupla
+        enter camp1;
+        enter camp2;
+        car camp3;
+    ftupla;
+    //zona incorrecte
+    socUnAlias: enter;
+    socUnAlias: real;
+    socUnAlias: vector enter mida 10;
+    socUnAlias: tupla
+        enter camp1;
+        enter camp2;
+        car camp3;
+    ftupla;
+ftipus

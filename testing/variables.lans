@@ -1,0 +1,11 @@
+variables
+    enter varEntera;
+    real varReal;
+    boolea varBooleana;
+    //zona incorrecte
+    enter varEntera;
+    enter varBooleana;
+    //per que aixo funcioni cal descomentar linies de codi en el g4
+    UnAlias varAlias;
+    DosAlias varAlias2; //no existeix
+fvariables
