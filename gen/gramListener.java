@@ -4,7 +4,6 @@
     import javafx.util.Pair;
     import java.util.Vector;
 
-
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**

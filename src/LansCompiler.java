@@ -18,8 +18,9 @@ public class LansCompiler {
             if(!classfile.endsWith(".class"))
                 classfile = classfile + ".class";
             //probablament per ficarli el nom que vole
-            //p.setLANSClassFile(classfile);
+            p.setLANSClassFile(classfile);
         }
         p.constBlock();
+
     }
 }

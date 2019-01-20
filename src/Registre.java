@@ -20,27 +20,27 @@ public class Registre  {
 	    /* si es una tupla, cada element del vector representa un camp de la tupla, sent el key el tipus i value el nom
 	    *  si es una funcio, cada element del vector representa un perametre, sent el key el tipus i el value const o var en funcio de si es paramtre entrada o entradasortida
 	    */
-	int adreca;
+	Long adreca;
 
 
     public Registre() {
         lexema="";
         tipus=null;
-        adreca=0;
+        adreca=0L;
     }
 
 
     public Registre(String l) {
         lexema=l;
         tipus=null;
-        adreca=0;
+        adreca=0L;
         tipusLexema = null;
     }
 
     public Registre(String l, String t) {
         lexema=l;
         tipus=t;
-        adreca=0;
+        adreca=0L;
         tipusLexema = null;
     }
 
@@ -48,10 +48,10 @@ public class Registre  {
         lexema=l;
         tipus=t;
         tipusLexema = t2;
-        adreca=0;
+        adreca=0L;
     }
 
-    public Registre(String l, String t, String t2, int a) {
+    public Registre(String l, String t, String t2, Long a) {
         lexema=l;
         tipus=t;
         tipusLexema = t2;
@@ -64,7 +64,7 @@ public class Registre  {
     public String getTipus() {
         return (tipus);
     }
-    public Integer getAdreca() {
+    public Long getAdreca() {
         return (adreca);
     }
     public String getTipusLexema() {return tipusLexema;}
@@ -79,7 +79,7 @@ public class Registre  {
     public void putTipusLexema(String t) {
         tipusLexema=t;
     }
-    public void putAdreca(int a) {
+    public void putAdreca(Long a) {
         adreca=a;
     }
     public void putCampsAddicionals(Vector<Pair<String,String>> camps){
