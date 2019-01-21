@@ -16,6 +16,7 @@
   \usepackage{subcaption}
   \usepackage{float}
   \usepackage{xcolor}
+  \usepackage{makecell,multirow}
 
 \setcounter{tocdepth}{4}
 \setcounter{secnumdepth}{4}
@@ -75,7 +76,11 @@ A la regla TK\_CONST\_INT anteriorment reconeixíem $0000$ però no $0001$, és 
 \begin{lstlisting}
   TK_CONST_INT: (('0' | DIGIT)+);
 \end{lstlisting}
-I es va resoldre l'error esmentat.
+I es va resoldre l'error esmentat. Això s'ha fet també amb els reals, per temes de consistència.
+\begin{lstlisting}
+  TK_CONST_REAL: ((('0' | DIGIT)+ '.') ('0' | DIGIT)+) 
+    ('E' '-'? (DIGIT | '0') ('0' | DIGIT)*)?;
+\end{lstlisting}
 
 \subsection{TK\_MULTILINE\_COMMENTS}
 A la regla TK\_MULTILINE\_COMMENTS continuem usant l'operador "*?". Si féssim servir
@@ -97,12 +102,16 @@ Els registres consisteixen en una classe amb els següents camps:
 \begin{center}
   \begin{tabular}{ |c|c|c|}
     \hline
-    Camp & Tipus & Significat \\
+    \textbf{Camp} & \textbf{Tipus} & \textbf{Significat} \\
    \hline
     lexema & String & nom de l'entrada. \\
+    \hline
     tipus & String & tipus del lexema. \\
+    \hline
     tipusLexema & String & tipus de lexema que conté l'entrada. \\
-    campsAddicionals & Vector de Pairs de dos Strings& Camps addicionals, com ara els camps de les tuples o els paràmetres de les funcions i accions. \\
+    \hline
+    \multirowcell{2}{campsAddicionals} & \multirowcell{2}{Vector de Pairs de dos Strings} & \multirowcell{2}{Camps addicionals, com ara els camps de les tuples \\o els paràmetres de les funcions i accions.} \\ &&\\
+    \hline
     adreca & Long & Adreça on es situa l'entrada en la màquina. \\
    \hline
   \end{tabular}
@@ -111,17 +120,30 @@ Els registres consisteixen en una classe amb els següents camps:
  Aquí una taula amb els possibles continguts dels camps:
 
  \begin{center}
-  \begin{tabular}{ |c|c|c|c|c|c|c|}
+  \begin{tabular}{ |c|c|c|c|}
     \hline
-    Camp & Constant & Variable & Tupla & Alias & Acció/Funció & Vector\\
+    Camp & Constant & Variable & Tupla \\
    \hline
-   tipus & tipus & tipus & null & tipus real & tipus retorn, void si és acció & tipus \\
-   tipusLexema & "const" & "var" & "tupla" & "alias" & "funcio" & "vector" \\
-   campsAddicionals & null & null & tipus i camp de la tupla & null & tipus parametres i si son entrada o sortida de la funció/acció & null \\
-   adreca & Adreça a la ConstantPool & Adreça variable & 0 & 0 & adreça funció/acció & adreça vector \\
+   tipus & tipus & tipus & null \\
+   tipusLexema & "const" & "var" & "tupla"  \\
+   campsAddicionals & null & null & tipus i camps \\
+   adreca & Adreça a la ConstantPool & Adreça variable & 0\\
    \hline
   \end{tabular}
   \end{center}
+
+  \begin{center}
+    \begin{tabular}{ |c|c|c|c|}
+      \hline
+      Camp & Alias & Acció/Funció & Vector\\
+     \hline
+     tipus  & tipus real & tipus retorn, void si és acció & tipus \\
+     tipusLexema & "alias" & "funcio" & "vector" \\
+     campsAddicionals & null & tipus paràmetres i entr o entrsor & null \\
+     adreca & 0 & adreça funció/acció & adreça vector \\
+     \hline
+    \end{tabular}
+    \end{center}
 
   A part, amb les tuples, s'han afegit registres com a variables per cada camp de la tupla, usant com a nom de lexema el següent format: "nomTupla.nomCamp". Com que sabem que no hi poden haver variables amb punts al mig, sabem que no hi haura conflictes.
 
