@@ -1,0 +1,86 @@
+programa prog
+    variables
+        car c1;
+        car c2;
+        car c3;
+        car c4;
+        car c5;
+        car c6;
+        car c7;
+        enter i;
+        enter guess;
+        enter radiguess;
+        car entrada;
+        boolea acabat;
+    fvariables
+    guess:=50;
+    radiguess:=50;
+    acabat:=fals;
+    per i de 0 fins 13 fer
+        si ((i%7)==0)llavors
+            c1:='-';
+        altrament
+            c1:='_';
+        fsi
+        si ((i%7)==1)llavors
+            c2:='-';
+        altrament
+            c2:='_';
+        fsi
+        si ((i%7)==2)llavors
+            c3:='-';
+        altrament
+            c3:='_';
+        fsi
+        si ((i%7)==3)llavors
+            c4:='-';
+        altrament
+            c4:='_';
+        fsi
+        si ((i%7)==4)llavors
+            c5:='-';
+        altrament
+            c5:='_';
+        fsi
+        si ((i%7)==5)llavors
+            c6:='-';
+        altrament
+            c6:='_';
+        fsi
+        si ((i%7)==6)llavors
+            c7:='-';
+        altrament
+            c7:='_';
+        fsi
+        escriure(c1);
+        escriure(c2);
+        escriure(c3);
+        escriure(c4);
+        escriure(c5);
+        escriure(c6);
+        escriureln(c7);
+    fper
+    mentre (i>=0) fer
+        escriureln(i);
+        i:=i-1;
+    fmentre
+    //farem un truc de magia
+    escriure('P');escriure('e');escriure('n');escriure('s');escriure('a');escriure(' ');escriure('u');escriure('n');escriure(' ');escriure('n');escriure('o');escriure('m');escriure('b');escriure('r');escriure('e');escriure(' ');escriure('d');escriure('e');escriure('l');escriure(' ');escriure('0');escriure(' ');escriure('a');escriure('l');escriure(' ');escriure('1');escriure('0');escriureln('0');
+    mentre (acabat==fals & radiguess !=0) fer
+            escriure(guess);escriureln('?');
+            escriure('+');escriure(',');escriure('-');escriure(' ');escriure('o');escriure(' ');escriure('c');escriureln('?');        //demanar gran petit o done
+            llegir(entrada);
+            si(entrada == 'c')llavors
+                escriure(':');escriureln(')');
+                acabat:=cert;
+            fsi
+            si(entrada == '+')llavors
+                radiguess:=radiguess\2;
+                guess:=guess+radiguess;
+            fsi
+            si(entrada == '-')llavors
+                radiguess:=radiguess\2;
+                guess:=guess-radiguess;
+            fsi
+    fmentre
+fprograma

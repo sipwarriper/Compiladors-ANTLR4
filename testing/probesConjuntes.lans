@@ -1,0 +1,64 @@
+tipus
+	alias1 : enter;
+
+ftipus
+
+constants
+	real r1 := 1.2;
+	real r2 := 1;
+	enter e1 := 3;
+	enter e2 := 3.4;
+	boolea CERT := cert;
+fconstants
+
+
+
+
+//============= Programa principal ================
+programa ProgramaTestSemantic
+variables
+	enter e1;
+	enter e3;
+	enter e7;
+	car e3;
+	car alias1;
+	car c1;
+	boolea b1;
+fvariables
+
+
+b1 := 4;
+r1 := 5;
+e5 := 2+2;
+e3 := 2*abc*abcde;
+c1 := e3 ? 'a' : 'b';
+b1 := 4 == true;
+
+escriureln();
+escriure(b1 ? e3 : c1);
+
+abc(cert);
+abc(CERT);
+
+mentre e3 fer
+	e3 := e3+1;
+	escriure(e3);
+fmentre
+
+e3:= 4;
+
+mentre e3 < 10  fer
+	escriure(e3);
+fmentre
+
+per i de 1 fins e3 fer
+	escriureln(i);
+fper
+
+
+per e7 de 10 fins e3 fer
+	escriureln(e7);
+fper
+
+
+fprograma
