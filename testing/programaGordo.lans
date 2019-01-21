@@ -1,3 +1,7 @@
+constants
+    real test:=000.23E03;
+fconstants
+
 programa prog
     variables
         car c1;
@@ -8,14 +12,21 @@ programa prog
         car c6;
         car c7;
         enter i;
+        enter j;
         enter guess;
         enter radiguess;
         car entrada;
         boolea acabat;
     fvariables
+    escriure(test);
     guess:=50;
     radiguess:=50;
     acabat:=fals;
+    per i de 0 fins 9 fer
+        per j de 0 fins 9 fer
+            escriure(i);escriureln(j);
+        fper
+    fper
     per i de 0 fins 13 fer
         si ((i%7)==0)llavors
             c1:='-';
@@ -65,22 +76,25 @@ programa prog
         i:=i-1;
     fmentre
     //farem un truc de magia
-    escriure('P');escriure('e');escriure('n');escriure('s');escriure('a');escriure(' ');escriure('u');escriure('n');escriure(' ');escriure('n');escriure('o');escriure('m');escriure('b');escriure('r');escriure('e');escriure(' ');escriure('d');escriure('e');escriure('l');escriure(' ');escriure('0');escriure(' ');escriure('a');escriure('l');escriure(' ');escriure('1');escriure('0');escriureln('0');
-    mentre (acabat==fals & radiguess !=0) fer
+    escriureln("Pensa un nombre del 0 al 100");
+    mentre (no acabat) fer
             escriure(guess);escriureln('?');
-            escriure('+');escriure(',');escriure('-');escriure(' ');escriure('o');escriure(' ');escriure('c');escriureln('?');        //demanar gran petit o done
+            escriureln("[+],[+] o [c]orrecte?");
             llegir(entrada);
             si(entrada == 'c')llavors
                 escriure(':');escriureln(')');
                 acabat:=cert;
             fsi
             si(entrada == '+')llavors
-                radiguess:=radiguess\2;
+                radiguess:=(radiguess<2?1:radiguess\2);
                 guess:=guess+radiguess;
             fsi
             si(entrada == '-')llavors
-                radiguess:=radiguess\2;
+                radiguess:=(radiguess<2?1:radiguess\2);
                 guess:=guess-radiguess;
             fsi
     fmentre
+    si((acabat ==cert & fals) | (fals | fals))llavors
+        escriure("Adeu!");
+    fsi
 fprograma

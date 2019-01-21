@@ -7,8 +7,7 @@ grammar gram;
 }
 
 
-
-//******************* Autors: Lluís Trilla i Ismael El Habri
+//******************* Autors: Ismael El Habri i Lluís Trilla
 //******************* la regla inicial del programa es la regla program
 
 
@@ -44,11 +43,6 @@ grammar gram;
     }
 
 }
-
-
-//Regla sintactica: qualsevol token diferent de EOF
-//inici: (~EOF)+;
-
 
 
 //Regles lexiques
@@ -129,12 +123,11 @@ fragment TK_OP_QUOTE: '"';
 
 TK_CONST_CHAR: '\'' ((' ' .. '~' ) | '\\' '\'') '\'';
 
-TK_CONST_REAL: (('0.' | DIGIT* '.') ('0' | DIGIT)+) ('E' '-'? DIGIT ('0' | DIGIT)*)?;
+TK_CONST_REAL: ((('0' | DIGIT)+ '.') ('0' | DIGIT)+) ('E' '-'? (DIGIT | '0') ('0' | DIGIT)*)?;
 
 TK_CONST_BOOL: 'cert' | 'fals';
 
 TK_CONST_INT: (('0' | DIGIT)+);
-
 
 //------OPERADORS-----------------------------------------
 
@@ -179,12 +172,8 @@ TK_SEP_SEMICOLON: ';';
 
 //----------Identificadors
 
-//TK_STRING_LITERAL: '"' ((' ' .. '~' ) | '\\' '\'') * '"';
 TK_STRING_LITERAL: TK_OP_QUOTE (~('"'|'\n'|'\\') | ('\\"'))* TK_OP_QUOTE;
 TK_IDENTIFIER: (LETTER | CAPLETTER) (LETTER|CAPLETTER|DIGIT|'0'|'_' )*;
-test: TK_CONST_REAL;
-
-//testingRule: TK_MULTILINE_COMMENTS EOF; //regla per testejar
 
 
 // Analisis sintactic
@@ -219,7 +208,7 @@ main @init{
         x.addMainCode(100L,new Long(contVar+3),trad);
         x.write();
     }
-}; //nse si es apropiat dirli sentence pero weno
+};
 
 typeBlock: TK_PC_TIPUS newType* TK_PC_FTIPUS;
 
@@ -227,7 +216,18 @@ typeBlock: TK_PC_TIPUS newType* TK_PC_FTIPUS;
 newType @init{Registre registre = new Registre();} : id=TK_IDENTIFIER TK_OP_COLON (
     reg = basicType {$reg.reg.putLexema($id.text); registre = $reg.reg;}
     | reg2 = vectorDec {$reg2.reg.putLexema($id.text); registre = $reg2.reg;}
-    | reg3 = tuplaDec {$reg3.reg.putLexema($id.text); registre = $reg3.reg;}
+    | reg3 = tuplaDec {
+        $reg3.reg.putLexema($id.text);
+        registre = $reg3.reg;
+        Vector<Pair<String,String>> camps = registre.getCampsAddicionals();
+        for (Pair<String, String> c : camps){
+            String nom = new String($id.text+"."+c.getValue());
+            Registre reg = new Registre(nom, c.getKey(), "var", new Long(contVar));
+            contVar++;
+            TS.inserir(nom, reg);
+        }
+
+        }
     ) TK_SEP_SEMICOLON{
         if(TS.existeix($id.text)){ //no podem tenir dos tipus amb el mateix nom!
             error = true;
@@ -249,7 +249,6 @@ vectorDec returns [Registre reg]: TK_PC_VECTOR bt=basicType{
     $reg = new Registre ("", $bt.reg.getTipus(), "vector");
 } TK_PC_MIDA TK_CONST_INT (TK_PC_INICI TK_CONST_INT)?;
 
-//todo: actualitzar taula de simbols de forma que els camps passen a ser variables amb id "tupla_camp", aixi que el campsAddicionals passa a ser un vector<Pair<String, null>>
 tuplaDec returns [Registre reg] @init{Vector<Pair<String,String>> camps = new Vector<Pair<String,String>>(10); }: TK_PC_TUPLA (bt = basicType id = TK_IDENTIFIER TK_SEP_SEMICOLON{
     camps.add(new Pair<>($bt.reg.getTipus(), $id.text));
 })+ TK_PC_FTUPLA{
@@ -274,13 +273,9 @@ constBlock: TK_PC_CONSTANTS (bt=basicType id=TK_IDENTIFIER TK_OP_ASSIGN c = cons
         error = true;
         System.out.println("Error de tipus a la linia " + $id.line + " càsting il·legal");
     }
-} TK_SEP_SEMICOLON)* TK_PC_FCONSTANTS; //preguntar si ha de ser * com al enunciat o + (una o m'es, obligar a no declarar block si no luses)
+} TK_SEP_SEMICOLON)* TK_PC_FCONSTANTS;
 
 varBlock
-//@init{
-//     Registre rTest = new Registre ("UnAlias", "enter","alias");
-//     TS.inserir("UnAlias", rTest);
-//}
 : TK_PC_VARIABLES (t=type id=TK_IDENTIFIER TK_SEP_SEMICOLON{
     if ($t.reg!=null){
         String tipus = null;
@@ -309,7 +304,7 @@ accioImp: TK_PC_ACCIO TK_IDENTIFIER TK_OP_PAR_OPEN params? TK_OP_PAR_CLOSE
           varBlock? sentence* TK_PC_FACCIO;
 funcImp:  TK_PC_FUNCIO TK_IDENTIFIER TK_OP_PAR_OPEN params? TK_OP_PAR_CLOSE TK_PC_RETURN basicType
           varBlock? sentence*
-          TK_PC_RETURN expr TK_SEP_SEMICOLON // es una expresio de tipus basic!
+          TK_PC_RETURN expr TK_SEP_SEMICOLON
           TK_PC_FFUNCIO;
 
 
@@ -323,18 +318,24 @@ type returns [Registre reg]: id = TK_IDENTIFIER {
         }
     }| bt = basicType{$reg = $bt.reg;};
 
-assign returns [Vector<Long> trad]: (id = TK_IDENTIFIER/*| tuple | vector*/ )TK_OP_ASSIGN e=expr{
+assign returns [Vector<Long> trad] @init {
+    Registre r = null;
+}: (id = TK_IDENTIFIER{
     if (!error){
         if (!(TS.existeix($id.text))){
             error=true;
             System.out.println("Variable " +$id.text+  " inexistent a la linea " + $id.line);
         }
-        else if(!TS.obtenir($id.text).getTipusLexema().equals("var")){
+        else if(!TS.obtenir($id.text).getTipusLexema().equals("var") && !TS.obtenir($id.text).getTipusLexema().equals("tupla")){
             error=true;
             System.out.println($id.text +  " no es pot editar a la linea " + $id.line);
         }
         else{
-            Registre r = TS.obtenir($id.text);
+            r = TS.obtenir($id.text);
+        }
+    }
+}| tup=tuple{r = $tup.r;} | /*vector*/ )TK_OP_ASSIGN e=expr{
+        if(!error){
             char tipus = r.getTipus().toUpperCase().charAt(0);
             $trad = $e.trad;
             if(tipus == $e.tipus){
@@ -363,7 +364,7 @@ assign returns [Vector<Long> trad]: (id = TK_IDENTIFIER/*| tuple | vector*/ )TK_
                 System.out.println("Error de tipus a la linea " + $id.line);
             }
         }
-    }
+
 } TK_SEP_SEMICOLON;
 
 
@@ -594,7 +595,7 @@ write returns [Vector<Long> trad] @init{
             }
       } | s1=TK_STRING_LITERAL{
               Long tempString = x.addConstant("S",$s1.text.replace("\"", ""));
-              $trad.add(x.LDC_W); //carragem la string a la pila
+              $trad.add(x.LDC_W); //carraguem la string a la pila
               $trad.add(x.nByte(tempString,2));
               $trad.add(x.nByte(tempString,1));
               $trad.add(x.INVOKESTATIC);
@@ -638,7 +639,7 @@ writeln returns [Vector<Long> trad] @init{
         }
 } | s=TK_STRING_LITERAL{
     Long tempString = x.addConstant("S",$s.text.replace("\"", ""));
-    $trad.add(x.LDC_W); //carragem la string a la pila
+    $trad.add(x.LDC_W); //carraguem la string a la pila
     $trad.add(x.nByte(tempString,2));
     $trad.add(x.nByte(tempString,1));
     $trad.add(x.INVOKESTATIC);
@@ -662,7 +663,7 @@ writeln returns [Vector<Long> trad] @init{
                     $trad.add(x.nByte(x.mPutChar,1));
                     break;
                  case 'B':
-                    $trad.add(x.I2B); //castajem enter a boolea
+                    $trad.add(x.I2B); //castejem enter a boolea
                     $trad.add(x.nByte(x.mPutBoolean,2));
                     $trad.add(x.nByte(x.mPutBoolean,1));
                     break;
@@ -670,7 +671,7 @@ writeln returns [Vector<Long> trad] @init{
         }
 } | s1=TK_STRING_LITERAL{
     Long tempString = x.addConstant("S",$s1.text.replace("\"", ""));
-    $trad.add(x.LDC_W); //carragem la string a la pila
+    $trad.add(x.LDC_W); //carraguem la string a la pila
     $trad.add(x.nByte(tempString,2));
     $trad.add(x.nByte(tempString,1));
     $trad.add(x.INVOKESTATIC);
@@ -700,7 +701,7 @@ sentence returns [Vector<Long> trad]: (a=assign{$trad=$a.trad;}
 
 constValue returns [char tipus, Vector<Long> trad] @init{
     $trad = new Vector<Long> (10);
-}: //todo: repassar float
+}:
     a=TK_CONST_INT {
         $tipus = 'E';
         $trad.add(x.BIPUSH);
@@ -729,24 +730,34 @@ constValue returns [char tipus, Vector<Long> trad] @init{
         }
     };
 
-tuple returns [char tipus]: id=TK_IDENTIFIER TK_OP_TUPLE camp=TK_IDENTIFIER{
+tuple returns [char tipus, Registre r]: id=TK_IDENTIFIER TK_OP_TUPLE camp=TK_IDENTIFIER{
     if(TS.existeix($id.text)){
         Registre reg = TS.obtenir($id.text);
-        Vector<Pair<String,String>> camps = reg.getCampsAddicionals();
-        boolean trobat = false;
-        int i = 0;
-        Pair<String, String> c = null;
-        while (trobat != false && i < camps.size()){
-            c = camps.get(i);
-            if (c.getValue().equals($camp.text)) trobat = true;
-            i++;
-        }
-        if (!trobat) {
-            error = true;
-            System.out.println("Error: la tupla " + $id.text + " no te el camp " + $camp.text + " a la linea: " + $id.line);
+        if(TS.existeix(reg.getTipus()) && TS.obtenir(reg.getTipus()).getTipusLexema().equals("tupla")){
+            reg = TS.obtenir(reg.getTipus());
+            Vector<Pair<String,String> > camps = reg.getCampsAddicionals();
+            boolean trobat = false;
+            int i = 0;
+            Pair<String, String> c = null;
+            while (!trobat && i < camps.size()){
+                c = camps.get(i);
+                if (c.getValue().equals($camp.text)) trobat = true;
+                i++;
+            }
+            if (!trobat) {
+                error = true;
+                System.out.println("Error: la tupla " + $id.text + " no te el camp " + $camp.text + " a la linea: " + $id.line);
+            }
+            else{
+                $tipus = c.getKey().toUpperCase().charAt(0);
+                String nom = new String(reg.getLexema()+"."+c.getValue());
+                $r = TS.obtenir(nom);
+            }
         }
         else{
-            $tipus = c.getKey().toUpperCase().charAt(0);
+            error = true;
+            System.out.println("Error: la tupla " + $id.text + " no existeix, a la linea: " + $id.line);
+
         }
     }
     else{
@@ -842,7 +853,7 @@ logicUp returns [char tipus, Vector<Long> trad]:
         (s=(TK_OP_EQ | TK_OP_DIFF | TK_OP_GT | TK_OP_LT | TK_OP_LOET | TK_OP_GOET) t2=sum {
               if($s.text.equals("==") || $s.text.equals("!=")) {
                 if(($t1.tipus != $t2.tipus) && !(($t1.tipus == 'E' && $t2.tipus == 'R')||($t1.tipus == 'R' && $t2.tipus == 'E'))){
-                    // == i != esta definit sobre tots els tipus reals
+                    // == i != esta definit sobre tots els tipus
                     error = true;
                     System.out.println("Error de tipus detectat a la linia " + $s.line +": El tipus del comparador lògic no casen (cas1)");
                     break;
@@ -895,7 +906,7 @@ logicUp returns [char tipus, Vector<Long> trad]:
                 if($t2.tipus=='E'){
                    $trad.add(x.I2F);
                 }
-                $trad.add(x.FCMPG);
+                $trad.add(x.FCMPG); //Fem sempre la comparacio amb reals, si alguns dels operadors no eren reals ja els haurem castejat
                 switch($s.text){
                     case ">":
                         $trad.add(x.IFGT);
@@ -910,21 +921,21 @@ logicUp returns [char tipus, Vector<Long> trad]:
                         $trad.add(x.IFGE);
                         break;
                 }
-                }
-                Long salt=8L;
-                $trad.add(x.nByte(salt,2));
-                $trad.add(x.nByte(salt,1));
+            }
+            Long salt=8L;
+            $trad.add(x.nByte(salt,2));
+            $trad.add(x.nByte(salt,1));
 
-                $trad.add(x.BIPUSH);
-                $trad.add(new Long(0));
+            $trad.add(x.BIPUSH);
+            $trad.add(new Long(0));
 
-                $trad.add(x.GOTO);
-                salt=5L;
-                $trad.add(x.nByte(salt,2));
-                $trad.add(x.nByte(salt,1));
+            $trad.add(x.GOTO);
+            salt=5L;
+            $trad.add(x.nByte(salt,2));
+            $trad.add(x.nByte(salt,1));
 
-                $trad.add(x.BIPUSH);
-                $trad.add(new Long(1));
+            $trad.add(x.BIPUSH);
+            $trad.add(new Long(1));
 
           })+)
         | t=sum{$tipus = $t.tipus;  $trad = $t.trad;};
@@ -1028,8 +1039,6 @@ neg returns [char tipus, Vector<Long> trad]:
     | t=value {$tipus=$t.tipus;  $trad = $t.trad;};
 
 value returns [char tipus, Vector<Long> trad]:
-//TODO: semantic value incomplet
-//TODO: provar id, tuple i vector
     t1 = constValue {$tipus = $t1.tipus; $trad = $t1.trad;}
     | id=TK_IDENTIFIER{
         $trad = new Vector<Long> (10);
@@ -1063,7 +1072,20 @@ value returns [char tipus, Vector<Long> trad]:
             System.out.println("Error: " + $id.text + " no existeix: " + $id.line);
         }
     }
-    |t2 = tuple {$tipus = $t2.tipus;}
+    |t2 = tuple {
+        $tipus = $t2.tipus;
+        if(!error){
+            $trad = new Vector<Long> (10);
+            Registre reg = $t2.r;
+            if($tipus != 'R'){
+                $trad.add(x.ILOAD);
+            }
+            else{
+                $trad.add(x.FLOAD);
+            }
+            $trad.add(new Long(reg.getAdreca()));
+        }
+    }
     |t3 = vector {$tipus = $t3.tipus;}
     | func
     | t= parenthesis {$tipus = $t.tipus; $trad = $t.trad;};

@@ -1,0 +1,148 @@
+\documentclass[11pt,a4paper,twoside]{article}
+  \usepackage{a4wide}
+  \usepackage{epsfig}
+  \usepackage{amsmath}
+  \usepackage{tabu}
+  \usepackage{amsfonts}
+  \usepackage{latexsym}
+  \usepackage[utf8]{inputenc}
+  \usepackage{listings}
+  \usepackage{color}
+  \usepackage{titlesec}    
+  \usepackage{enumitem}
+  \usepackage[catalan]{babel}
+  \usepackage{newunicodechar}
+  \usepackage{graphicx}
+  \usepackage{subcaption}
+  \usepackage{float}
+  \usepackage{xcolor}
+
+\setcounter{tocdepth}{4}
+\setcounter{secnumdepth}{4}
+  
+\newunicodechar{Ŀ}{\L.}
+\newunicodechar{ŀ}{\l.}
+
+
+% \titleformat{\chapter}
+%   {\normalfont\LARGE\bfseries}{\thechapter}{1em}{}
+% \titlespacing*{\chapter}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=false, %set true if you want colored links
+  linktoc=all,     %set to all if you want both sections and subsections linked
+  linkcolor=blue,  %choose some color if you want links to stand out
+}
+
+
+
+\setlength{\footskip}{50pt}
+\setlength{\parindent}{0cm} \setlength{\oddsidemargin}{-0.5cm} \setlength{\evensidemargin}{-0.5cm}
+\setlength{\textwidth}{17cm} \setlength{\textheight}{23cm} \setlength{\topmargin}{-1.5cm} \addtolength{\parskip}{2ex}
+\setlength{\headsep}{1.5cm}
+
+\title{Pràctica Compiladors: Compilador LANS}
+\author{Ismael El Habri
+	\and 
+	Lluís Trilla
+	}
+
+\date{\today} 
+
+
+
+\begin{document}
+\maketitle
+
+\section{Modificacions Part Léxica i Sintàctica}
+
+\subsection{TK\_STRING\_LITERAL}
+
+La nostra regla TK\_STRING\_LITERAL que ens serveix per identificar els literals de string és
+\begin{lstlisting}
+  TK_STRING_LITERAL: TK_OP_QUOTE (~('"'|'\n'|'\\') | ('\\"'))* TK_OP_QUOTE;
+\end{lstlisting}
+I anteriorment, TK\_OP\_QUOTE no éra un fragment, de manera que el lexer ens acceptava coses del estil "abc; . Ho vam corregir per tal que fós un fragment, i es va corregir l'error.
+
+\subsection{TK\_CONST\_INT}
+A la regla TK\_CONST\_INT anteriorment reconeixíem $0000$ però no $0001$, és a dir, només acceptavem 0s a l'esquerra en cas que el valor fós 0. Vam corregir la regla de manera que va quedar així:
+\begin{lstlisting}
+  TK_CONST_INT: (('0' | DIGIT)+);
+\end{lstlisting}
+I es va resoldre l'error esmentat.
+
+\subsection{TK\_MULTILINE\_COMMENTS}
+A la regla TK\_MULTILINE\_COMMENTS continuem usant l'operador "*?". Si féssim servir
+\begin{lstlisting}
+(.*)?
+\end{lstlisting}
+  enlloc de
+\begin{lstlisting}
+(.)*?
+\end{lstlisting}
+    aleshores consideraríem cadenes com "/*comentari*/codiVàlid()/*comentari2*/"$ $
+    com a un sòl comentari, el qual inclouria també codiValid().
+
+\section{Estructura Taula de Símbols}
+La taula de Símbols consisteix en un Mapa de Registres.
+
+Els registres consisteixen en una classe amb els següents camps:
+
+\begin{center}
+  \begin{tabular}{ |c|c|c|}
+    \hline
+    Camp & Tipus & Significat \\
+   \hline
+    lexema & String & nom de l'entrada. \\
+    tipus & String & tipus del lexema. \\
+    tipusLexema & String & tipus de lexema que conté l'entrada. \\
+    campsAddicionals & Vector de Pairs de dos Strings& Camps addicionals, com ara els camps de les tuples o els paràmetres de les funcions i accions. \\
+    adreca & Long & Adreça on es situa l'entrada en la màquina. \\
+   \hline
+  \end{tabular}
+  \end{center}
+
+ Aquí una taula amb els possibles continguts dels camps:
+
+ \begin{center}
+  \begin{tabular}{ |c|c|c|c|c|c|c|}
+    \hline
+    Camp & Constant & Variable & Tupla & Alias & Acció/Funció & Vector\\
+   \hline
+   tipus & tipus & tipus & null & tipus real & tipus retorn, void si és acció & tipus \\
+   tipusLexema & "const" & "var" & "tupla" & "alias" & "funcio" & "vector" \\
+   campsAddicionals & null & null & tipus i camp de la tupla & null & tipus parametres i si son entrada o sortida de la funció/acció & null \\
+   adreca & Adreça a la ConstantPool & Adreça variable & 0 & 0 & adreça funció/acció & adreça vector \\
+   \hline
+  \end{tabular}
+  \end{center}
+
+  A part, amb les tuples, s'han afegit registres com a variables per cada camp de la tupla, usant com a nom de lexema el següent format: "nomTupla.nomCamp". Com que sabem que no hi poden haver variables amb punts al mig, sabem que no hi haura conflictes.
+
+\section{Parts no Obligatòries}
+
+Hem fet el semàntic de les següents parts no obligatories:
+\begin{itemize}
+  \item Alies
+  \item Tupla
+  \item Vector
+\end{itemize}
+
+Pel que fa la generació de codi:
+
+\begin{itemize}
+  \item Alies
+  \item Tupla
+\end{itemize}
+
+\section{Decisions}
+
+La única decisió que hem fet ha estat que es puguin ficar zeros a l'esquerra en els enters i els reals.
+
+\end{document}

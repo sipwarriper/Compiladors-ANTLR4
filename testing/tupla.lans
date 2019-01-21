@@ -1,0 +1,25 @@
+tipus
+    unaTupla: tupla
+        enter camp1;
+        car camp2;
+        boolea camp3;
+        real camp4;
+    ftupla;
+ftipus
+
+programa prog
+    variables
+        unaTupla laTupla;
+    fvariables
+
+    laTupla.camp1:=2;
+    laTupla.camp3:=cert;
+    laTupla.camp2:='c';
+    laTupla.camp4:=000000000000.3E000000003;
+
+
+    escriureln(laTupla.camp1+3);
+    escriureln(laTupla.camp2);
+    escriureln(laTupla.camp3);
+    escriureln(laTupla.camp4);
+fprograma
