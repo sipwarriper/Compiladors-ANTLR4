@@ -12,6 +12,16 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface gramListener extends ParseTreeListener {
 	/**
+	 * Enter a parse tree produced by {@link gramParser#test}.
+	 * @param ctx the parse tree
+	 */
+	void enterTest(gramParser.TestContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link gramParser#test}.
+	 * @param ctx the parse tree
+	 */
+	void exitTest(gramParser.TestContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link gramParser#program}.
 	 * @param ctx the parse tree
 	 */

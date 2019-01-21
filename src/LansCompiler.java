@@ -15,12 +15,11 @@ public class LansCompiler {
         gramParser p = new gramParser(tokens);
         if(args.length == 2){
             String classfile = args[1];
-            if(!classfile.endsWith(".class"))
-                classfile = classfile + ".class";
+            if(!classfile.endsWith(".class")) classfile = classfile + ".class";
             //probablament per ficarli el nom que vole
             p.setLANSClassFile(classfile);
         }
-        p.constBlock();
+        p.program();
 
     }
 }
