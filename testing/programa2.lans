@@ -1,28 +1,9 @@
-constants
-    boolea caracter := cert;
-fconstants
-
 programa prog
     variables
-        boolea hola;
-        enter adeu;
-        real flota;
+        enter caracter;
     fvariables
-    llegir(flota);
-    flota:=1.0E2;
-    escriureln(caracter);
-
-    //llegir(hola);
-    //si(hola) llavors
-    //    escriure(1);
-    //altrament
-    //    escriure(2);
-    //fsi
-    //escriure(3);
-    //mentre(cert) fer
-    //    llegir(adeu);
-    //fmentre
-    //per adeu de 0 fins 10 fer
-    //    escriureln(adeu);
-    //fper
+    caracter:=1;
+    si (1 == 'c') llavors
+        escriureln(caracter);
+    fsi
 fprograma

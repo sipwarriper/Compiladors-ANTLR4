@@ -212,11 +212,11 @@ program
 main @init{
     Vector<Long> trad = new Vector<Long>(10);
 }: TK_PC_PROGRAMA TK_IDENTIFIER varBlock? (s=sentence{
-    trad.addAll($s.trad);
+    if(!error) trad.addAll($s.trad);
 })* TK_PC_FPROGRAMA{
     if(!error){
         trad.add(x.RETURN);
-        x.addMainCode(10L,10L,trad);
+        x.addMainCode(100L,new Long(contVar+3),trad);
         x.write();
     }
 }; //nse si es apropiat dirli sentence pero weno
@@ -293,7 +293,7 @@ varBlock
         }
         else{
             error = true;
-            System.out.println("Error, dos variables amb el mateix nom detectats a la linia " + $id.line);
+            System.out.println("Error, no es pot declarar el mateix simbol (" + $id.text + ") a la linia " + $id.line);
         }
     }
 })* TK_PC_FVARIABLES;
@@ -378,8 +378,8 @@ if_rule returns [Vector<Long> trad]
                   System.out.println("Error de tipus detectat a la linia " + $s.line + ":la condició del if ha de ser booleana." + $t1.text);
               }
           } TK_PC_LLAVORS
-            (sen=sentence{trad2.addAll($sen.trad);})*
-            (TK_PC_ALTRAMENT (sen2=sentence{trad3.addAll($sen2.trad);})*)?
+            (sen=sentence{if(!error) trad2.addAll($sen.trad);})*
+            (TK_PC_ALTRAMENT (sen2=sentence{if(!error)trad3.addAll($sen2.trad);})*)?
             TK_PC_FSI{
                 if(!error){
                     $trad=$t1.trad;
@@ -399,13 +399,18 @@ if_rule returns [Vector<Long> trad]
 for_rule returns [Vector<Long> trad] @init{
     Vector<Long> trad2 = new Vector<Long>(10);
 }: TK_PC_PER id=TK_IDENTIFIER TK_PC_DE t1=expr TK_PC_FINS t2=expr{
-         if($t1.tipus != 'E' || $t2.tipus !='E' || !TS.existeix($id.text)){
-             error = true;
-             System.out.println("Error de tipus detectat a la linia " + $id.line + ":els valors dels intervals del for han de ser enters");
-         }
-     } TK_PC_FER
-    (sen=sentence{trad2.addAll($sen.trad);})*
+        if($t1.tipus != 'E' || $t2.tipus !='E'){
+           error = true;
+           System.out.println("Error de tipus detectat a la linia " + $id.line + ":els valors dels intervals del for han de ser enters");
+       } else if(!TS.existeix($id.text)){
+           error = true;
+           System.out.println("Variable " + $id.text + " no existeix. Linia " + $id.line);
+
+       }
+   } TK_PC_FER
+    (sen=sentence{if(!error) trad2.addAll($sen.trad);})*
     TK_PC_FPER{
+
         if(!error){
             Registre r = TS.obtenir($id.text);
             char tipus = r.getTipus().toUpperCase().charAt(0);
@@ -414,31 +419,30 @@ for_rule returns [Vector<Long> trad] @init{
                 $trad.add(x.ISTORE);
                 $trad.add(new Long(r.getAdreca()));
 
-                $trad.addAll($t2.trad);
-                $trad.add(x.ISTORE_0);
-
                 $trad.add(x.ILOAD);
                 $trad.add(new Long(r.getAdreca()));
-                $trad.add(x.ILOAD_0);
+
+                $trad.addAll($t2.trad);
 
                 $trad.add(x.IF_ICMPGT);
-                Long salt=trad2.size()+12L;
+                Long salt=trad2.size()+9L;
                 $trad.add(x.nByte(salt,2));
                 $trad.add(x.nByte(salt,1));
                 $trad.addAll(trad2);
                 $trad.add(x.IINC);
                 $trad.add(new Long(r.getAdreca()));
                 $trad.add(1L);
-
-                $trad.add(x.ILOAD);
-                $trad.add(new Long(r.getAdreca()));
-
-                $trad.add(x.ILOAD_0);
-
-                salt=0L-trad2.size()-9L;
+                //salt=0L-$trad.size()+$t1.trad.size()+3L;
+                salt=0L-trad2.size()-$t2.trad.size()-8L;
                 $trad.add(x.GOTO);
                 $trad.add(x.nByte(salt,2));
                 $trad.add(x.nByte(salt,1));
+                //APANYO
+                $trad.add(x.IINC);
+                $trad.add(new Long(r.getAdreca()));
+                $trad.add(-1L);
+
+
             }
             else{
                 error=true;
@@ -458,7 +462,7 @@ while_rule returns [Vector<Long> trad]
               System.out.println("Error de tipus detectat a la linia " + $s.line + ":la condició del while ha de ser booleana.");
           }
       }TK_PC_FER
-     (sen=sentence{trad2.addAll($sen.trad);})*
+     (sen=sentence{ if(!error) trad2.addAll($sen.trad);})*
      TK_PC_FMENTRE{
          if(!error){
                 $trad=$t1.trad;
@@ -485,6 +489,13 @@ read returns [Vector<Long> trad] @init{
         Registre reg = TS.obtenir($id.text);
         if(TS.obtenir($id.text).getTipusLexema().equals("var")){
             char tipus = reg.getTipus().toUpperCase().charAt(0);
+            if(reg.getTipus().equals("enter") || reg.getTipus().equals("real") || reg.getTipus().equals("car") || reg.getTipus().equals("boolea")){
+                tipus = reg.getTipus().toUpperCase().charAt(0);
+            }
+            else{ //tipus es un alias
+                Registre reg2 = TS.obtenir(reg.getTipus());
+                tipus = reg2.getTipus().toUpperCase().charAt(0);
+            }
             $trad.add(x.INVOKESTATIC);
             switch(tipus){
                  case 'E':
@@ -833,56 +844,79 @@ logicUp returns [char tipus, Vector<Long> trad]:
                 if(($t1.tipus != $t2.tipus) && !(($t1.tipus == 'E' && $t2.tipus == 'R')||($t1.tipus == 'R' && $t2.tipus == 'E'))){
                     // == i != esta definit sobre tots els tipus reals
                     error = true;
-                    System.out.println("Error de tipus detectat a la linia " + $s.line +": El tipus del comparador lògic no casen");
+                    System.out.println("Error de tipus detectat a la linia " + $s.line +": El tipus del comparador lògic no casen (cas1)");
+                    break;
                 }
-              } else if(($t1.tipus != 'E' || $t1.tipus != 'R') && ($t2.tipus != 'E' || $t2.tipus != 'R')){
+                else{
+                    if((($t1.tipus=='R' || $t2.tipus=='R') && ($t1.tipus=='E' || $t2.tipus=='E')) || ($t1.tipus=='R' && $t2.tipus=='R')){
+
+                        $trad=$t1.trad;
+                        if($t1.tipus=='E'){
+                            $trad.add(x.I2F);
+                        }
+
+                        $trad.addAll($t2.trad);
+                        if($t2.tipus=='E'){
+                            $trad.add(x.I2F);
+                        }
+
+                        $trad.add(x.FCMPG);
+
+                        if($s.text.equals("==")){
+                            $trad.add(x.IFEQ);
+                        }
+                        else{
+                            $trad.add(x.IFNE);
+                        }
+                    }else{
+                        $trad=$t1.trad;
+                        $trad.addAll($t2.trad);
+                        if($s.text.equals("==")){
+                            $trad.add(x.IF_ICMPEQ);
+                        }
+                        else{
+                            $trad.add(x.IF_ICMPNE);
+                        }
+                    }
+
+                }
+              } else if(($t1.tipus != 'E' || $t1.tipus != 'R') && ($t2.tipus != 'E' || $t2.tipus != 'R')&& ($t2.tipus != 'E' || $t2.tipus != 'E')&& ($t2.tipus != 'R' || $t2.tipus != 'R')){
                 //nomes es pot usar en reals i enters, aixi que si son diferents ferem casting a real.
                     error = true;
-                    System.out.println("Error de tipus detectat a la linia " + $s.line + ": El tipus del comparador lògic no casen");
+                    System.out.println("Error de tipus detectat a la linia " + $s.line + ": El tipus del comparador lògic no casen (cas2)");
+                    break;
               }
               else{
-                //placeholder per gen de codi
-                //aqui hauriem de fer castings
                 $trad=$t1.trad;
                 if($t1.tipus=='E'){
                    $trad.add(x.I2F);
                 }
-                $trad=$t1.trad;
+                $trad.addAll($t2.trad);
                 if($t2.tipus=='E'){
                    $trad.add(x.I2F);
                 }
-
-                if($s.text.equals("==") || $s.text.equals("!=")){
-                    if($s.text.equals("==")){
-                        $trad.add(x.IFEQ);
-                    }
-                    else{//$s.text.equals("!=")
-                        $trad.add(x.IFNE);
-                    }
+                $trad.add(x.FCMPG);
+                switch($s.text){
+                    case ">":
+                        $trad.add(x.IFGT);
+                        break;
+                    case "<":
+                        $trad.add(x.IFLT);
+                        break;
+                    case "<=":
+                        $trad.add(x.IFLE);
+                        break;
+                    case ">=":
+                        $trad.add(x.IFGE);
+                        break;
                 }
-                else{
-                    $trad.add(x.FCMPG);
-                    switch($s.text){
-                        case ">":
-                            $trad.add(x.IFLE);
-                            break;
-                        case "<":
-                            $trad.add(x.IFGE);
-                            break;
-                        case "<=":
-                            $trad.add(x.IFGT);
-                            break;
-                        case ">=":
-                            $trad.add(x.IFLT);
-                            break;
-                    }
                 }
                 Long salt=8L;
                 $trad.add(x.nByte(salt,2));
                 $trad.add(x.nByte(salt,1));
 
                 $trad.add(x.BIPUSH);
-                $trad.add(new Long(1));
+                $trad.add(new Long(0));
 
                 $trad.add(x.GOTO);
                 salt=5L;
@@ -890,16 +924,15 @@ logicUp returns [char tipus, Vector<Long> trad]:
                 $trad.add(x.nByte(salt,1));
 
                 $trad.add(x.BIPUSH);
-                $trad.add(new Long(0));
+                $trad.add(new Long(1));
 
-              }
           })+)
         | t=sum{$tipus = $t.tipus;  $trad = $t.trad;};
 
 sum returns [char tipus, Vector<Long> trad]:
     (t1=mult(s=(TK_OP_SUMA | TK_OP_RESTA) t2=mult{
         $trad = $t1.trad;
-          if(($t1.tipus == 'E' || $t1.tipus == 'R') && ($t2.tipus == 'R' || $t2.tipus == 'E')){
+          if(($t1.tipus == 'E' || $t1.tipus == 'R') && ($t2.tipus == 'R' || $t2.tipus == 'E') && $t1.tipus != $t2.tipus){
               $tipus = 'R';
           } else if($t1.tipus == $t2.tipus && ($t1.tipus == 'E' || $t1.tipus == 'R')){
               $tipus = $t1.tipus;
@@ -919,7 +952,6 @@ sum returns [char tipus, Vector<Long> trad]:
                     if ($s.text.equals("+")) $trad.add(x.FADD);
                     else $trad.add(x.FSUB);
               }
-
           }
     })+)
     | t=mult{$tipus = $t.tipus; $trad = $t.trad;};
@@ -931,13 +963,13 @@ mult returns [char tipus, Vector<Long> trad]:
                 $tipus = 'E';
           } else if ($s.text.equals("/") && ($t1.tipus == 'E' || $t1.tipus == 'R') && ($t2.tipus == 'E' || $t2.tipus == 'R')) {
                 $tipus = 'R';
-          } else if ($s.text.equals("*") && ($t1.tipus == 'E' || $t1.tipus == 'R') && ($t2.tipus == 'E' || $t2.tipus == 'R')) {
+          } else if ($s.text.equals("*") && ($t1.tipus == 'E' || $t1.tipus == 'R') && ($t2.tipus == 'E' || $t2.tipus == 'R') && $t1.tipus != $t2.tipus) {
                 $tipus = 'R';
           } else if ($s.text.equals("*") && $t1.tipus == $t2.tipus && ($t1.tipus == 'E' || $t2.tipus == 'R')) {
                 $tipus = $t1.tipus;
           } else {
                 error = true;
-                System.out.println("Error de tipus detectat a la linia " + $s.line + ": El tipus de " + $s.text +" no casen");
+                System.out.println("Error de tipus detectat a la linia " + $s.line + ": El tipus de l'operador " + $s.text +" no casen");
           }
           if(!error){
                 if($s.text.equals("%")){
@@ -974,7 +1006,7 @@ neg returns [char tipus, Vector<Long> trad]:
     (s=(TK_OP_NEG | TK_OP_MINUS) t=value{
         $tipus = $t.tipus;
         $trad = $t.trad;
-        if(($s.text.equals("~") && ($t.tipus != 'E' || $t.tipus != 'R' )) || ($s.text.equals("no") && $t.tipus != 'B')){
+        if(($s.text.equals("~") && !($t.tipus == 'E' || $t.tipus == 'R' )) || ($s.text.equals("no") && $t.tipus != 'B')){
               error = true;
               System.out.println("Error de tipus detectat a la linia " + $s.line + ": El tipus del unari és incorrecte");
         }
@@ -1025,7 +1057,6 @@ value returns [char tipus, Vector<Long> trad]:
                 $trad.add(x.nByte(constTemp,2));
                 $trad.add(x.nByte(constTemp,1));
             }
-
         }
         else{
             error = true;

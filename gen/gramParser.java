@@ -1,4 +1,4 @@
-// Generated from /home/sipwarriper/IdeaProjects/ANTLR4-Compiladors/src/gram.g4 by ANTLR 4.7
+// Generated from /home/klanc/Projects/Uni/4t/Compiladors/Compiladors-ANTLR4/src/gram.g4 by ANTLR 4.7
 
     import java.io.*;
     import javafx.util.Pair;
@@ -361,7 +361,7 @@ public class gramParser extends Parser {
 				setState(98);
 				((MainContext)_localctx).s = sentence();
 
-				    trad.addAll(((MainContext)_localctx).s.trad);
+				    if(!error) trad.addAll(((MainContext)_localctx).s.trad);
 
 				}
 				}
@@ -374,7 +374,7 @@ public class gramParser extends Parser {
 
 			    if(!error){
 			        trad.add(x.RETURN);
-			        x.addMainCode(10L,10L,trad);
+			        x.addMainCode(100L,new Long(contVar+3),trad);
 			        x.write();
 			    }
 
@@ -950,7 +950,7 @@ public class gramParser extends Parser {
 				        }
 				        else{
 				            error = true;
-				            System.out.println("Error, dos variables amb el mateix nom detectats a la linia " + (((VarBlockContext)_localctx).id!=null?((VarBlockContext)_localctx).id.getLine():0));
+				            System.out.println("Error, no es pot declarar el mateix simbol (" + (((VarBlockContext)_localctx).id!=null?((VarBlockContext)_localctx).id.getText():null) + ") a la linia " + (((VarBlockContext)_localctx).id!=null?((VarBlockContext)_localctx).id.getLine():0));
 				        }
 				    }
 
@@ -1817,7 +1817,7 @@ public class gramParser extends Parser {
 				{
 				setState(303);
 				((If_ruleContext)_localctx).sen = sentence();
-				trad2.addAll(((If_ruleContext)_localctx).sen.trad);
+				if(!error) trad2.addAll(((If_ruleContext)_localctx).sen.trad);
 				}
 				}
 				setState(310);
@@ -1839,7 +1839,7 @@ public class gramParser extends Parser {
 					{
 					setState(312);
 					((If_ruleContext)_localctx).sen2 = sentence();
-					trad3.addAll(((If_ruleContext)_localctx).sen2.trad);
+					if(!error)trad3.addAll(((If_ruleContext)_localctx).sen2.trad);
 					}
 					}
 					setState(319);
@@ -1940,11 +1940,15 @@ public class gramParser extends Parser {
 			setState(330);
 			((For_ruleContext)_localctx).t2 = expr();
 
-			         if(((For_ruleContext)_localctx).t1.tipus != 'E' || ((For_ruleContext)_localctx).t2.tipus !='E' || !TS.existeix((((For_ruleContext)_localctx).id!=null?((For_ruleContext)_localctx).id.getText():null))){
-			             error = true;
-			             System.out.println("Error de tipus detectat a la linia " + (((For_ruleContext)_localctx).id!=null?((For_ruleContext)_localctx).id.getLine():0) + ":els valors dels intervals del for han de ser enters");
-			         }
-			     
+			        if(((For_ruleContext)_localctx).t1.tipus != 'E' || ((For_ruleContext)_localctx).t2.tipus !='E'){
+			           error = true;
+			           System.out.println("Error de tipus detectat a la linia " + (((For_ruleContext)_localctx).id!=null?((For_ruleContext)_localctx).id.getLine():0) + ":els valors dels intervals del for han de ser enters");
+			       } else if(!TS.existeix((((For_ruleContext)_localctx).id!=null?((For_ruleContext)_localctx).id.getText():null))){
+			           error = true;
+			           System.out.println("Variable " + (((For_ruleContext)_localctx).id!=null?((For_ruleContext)_localctx).id.getText():null) + " no existeix. Linia " + (((For_ruleContext)_localctx).id!=null?((For_ruleContext)_localctx).id.getLine():0));
+
+			       }
+			   
 			setState(332);
 			match(TK_PC_FER);
 			setState(338);
@@ -1955,7 +1959,7 @@ public class gramParser extends Parser {
 				{
 				setState(333);
 				((For_ruleContext)_localctx).sen = sentence();
-				trad2.addAll(((For_ruleContext)_localctx).sen.trad);
+				if(!error) trad2.addAll(((For_ruleContext)_localctx).sen.trad);
 				}
 				}
 				setState(340);
@@ -1965,6 +1969,7 @@ public class gramParser extends Parser {
 			setState(341);
 			match(TK_PC_FPER);
 
+
 			        if(!error){
 			            Registre r = TS.obtenir((((For_ruleContext)_localctx).id!=null?((For_ruleContext)_localctx).id.getText():null));
 			            char tipus = r.getTipus().toUpperCase().charAt(0);
@@ -1973,31 +1978,30 @@ public class gramParser extends Parser {
 			                _localctx.trad.add(x.ISTORE);
 			                _localctx.trad.add(new Long(r.getAdreca()));
 
-			                _localctx.trad.addAll(((For_ruleContext)_localctx).t2.trad);
-			                _localctx.trad.add(x.ISTORE_0);
-
 			                _localctx.trad.add(x.ILOAD);
 			                _localctx.trad.add(new Long(r.getAdreca()));
-			                _localctx.trad.add(x.ILOAD_0);
+
+			                _localctx.trad.addAll(((For_ruleContext)_localctx).t2.trad);
 
 			                _localctx.trad.add(x.IF_ICMPGT);
-			                Long salt=trad2.size()+12L;
+			                Long salt=trad2.size()+9L;
 			                _localctx.trad.add(x.nByte(salt,2));
 			                _localctx.trad.add(x.nByte(salt,1));
 			                _localctx.trad.addAll(trad2);
 			                _localctx.trad.add(x.IINC);
 			                _localctx.trad.add(new Long(r.getAdreca()));
 			                _localctx.trad.add(1L);
-
-			                _localctx.trad.add(x.ILOAD);
-			                _localctx.trad.add(new Long(r.getAdreca()));
-
-			                _localctx.trad.add(x.ILOAD_0);
-
-			                salt=0L-trad2.size()-9L;
+			                //salt=0L-_localctx.trad.size()+((For_ruleContext)_localctx).t1.trad.size()+3L;
+			                salt=0L-trad2.size()-((For_ruleContext)_localctx).t2.trad.size()-8L;
 			                _localctx.trad.add(x.GOTO);
 			                _localctx.trad.add(x.nByte(salt,2));
 			                _localctx.trad.add(x.nByte(salt,1));
+			                //APANYO
+			                _localctx.trad.add(x.IINC);
+			                _localctx.trad.add(new Long(r.getAdreca()));
+			                _localctx.trad.add(-1L);
+
+
 			            }
 			            else{
 			                error=true;
@@ -2080,7 +2084,7 @@ public class gramParser extends Parser {
 				{
 				setState(348);
 				((While_ruleContext)_localctx).sen = sentence();
-				trad2.addAll(((While_ruleContext)_localctx).sen.trad);
+				 if(!error) trad2.addAll(((While_ruleContext)_localctx).sen.trad);
 				}
 				}
 				setState(355);
@@ -2241,6 +2245,13 @@ public class gramParser extends Parser {
 			        Registre reg = TS.obtenir((((ReadContext)_localctx).id!=null?((ReadContext)_localctx).id.getText():null));
 			        if(TS.obtenir((((ReadContext)_localctx).id!=null?((ReadContext)_localctx).id.getText():null)).getTipusLexema().equals("var")){
 			            char tipus = reg.getTipus().toUpperCase().charAt(0);
+			            if(reg.getTipus().equals("enter") || reg.getTipus().equals("real") || reg.getTipus().equals("car") || reg.getTipus().equals("boolea")){
+			                tipus = reg.getTipus().toUpperCase().charAt(0);
+			            }
+			            else{ //tipus es un alias
+			                Registre reg2 = TS.obtenir(reg.getTipus());
+			                tipus = reg2.getTipus().toUpperCase().charAt(0);
+			            }
 			            _localctx.trad.add(x.INVOKESTATIC);
 			            switch(tipus){
 			                 case 'E':
@@ -3487,56 +3498,79 @@ public class gramParser extends Parser {
 					                if((((LogicUpContext)_localctx).t1.tipus != ((LogicUpContext)_localctx).t2.tipus) && !((((LogicUpContext)_localctx).t1.tipus == 'E' && ((LogicUpContext)_localctx).t2.tipus == 'R')||(((LogicUpContext)_localctx).t1.tipus == 'R' && ((LogicUpContext)_localctx).t2.tipus == 'E'))){
 					                    // == i != esta definit sobre tots els tipus reals
 					                    error = true;
-					                    System.out.println("Error de tipus detectat a la linia " + (((LogicUpContext)_localctx).s!=null?((LogicUpContext)_localctx).s.getLine():0) +": El tipus del comparador lògic no casen");
+					                    System.out.println("Error de tipus detectat a la linia " + (((LogicUpContext)_localctx).s!=null?((LogicUpContext)_localctx).s.getLine():0) +": El tipus del comparador lògic no casen (cas1)");
+					                    break;
 					                }
-					              } else if((((LogicUpContext)_localctx).t1.tipus != 'E' || ((LogicUpContext)_localctx).t1.tipus != 'R') && (((LogicUpContext)_localctx).t2.tipus != 'E' || ((LogicUpContext)_localctx).t2.tipus != 'R')){
+					                else{
+					                    if(((((LogicUpContext)_localctx).t1.tipus=='R' || ((LogicUpContext)_localctx).t2.tipus=='R') && (((LogicUpContext)_localctx).t1.tipus=='E' || ((LogicUpContext)_localctx).t2.tipus=='E')) || (((LogicUpContext)_localctx).t1.tipus=='R' && ((LogicUpContext)_localctx).t2.tipus=='R')){
+
+					                        ((LogicUpContext)_localctx).trad = ((LogicUpContext)_localctx).t1.trad;
+					                        if(((LogicUpContext)_localctx).t1.tipus=='E'){
+					                            _localctx.trad.add(x.I2F);
+					                        }
+
+					                        _localctx.trad.addAll(((LogicUpContext)_localctx).t2.trad);
+					                        if(((LogicUpContext)_localctx).t2.tipus=='E'){
+					                            _localctx.trad.add(x.I2F);
+					                        }
+
+					                        _localctx.trad.add(x.FCMPG);
+
+					                        if((((LogicUpContext)_localctx).s!=null?((LogicUpContext)_localctx).s.getText():null).equals("==")){
+					                            _localctx.trad.add(x.IFEQ);
+					                        }
+					                        else{
+					                            _localctx.trad.add(x.IFNE);
+					                        }
+					                    }else{
+					                        ((LogicUpContext)_localctx).trad = ((LogicUpContext)_localctx).t1.trad;
+					                        _localctx.trad.addAll(((LogicUpContext)_localctx).t2.trad);
+					                        if((((LogicUpContext)_localctx).s!=null?((LogicUpContext)_localctx).s.getText():null).equals("==")){
+					                            _localctx.trad.add(x.IF_ICMPEQ);
+					                        }
+					                        else{
+					                            _localctx.trad.add(x.IF_ICMPNE);
+					                        }
+					                    }
+
+					                }
+					              } else if((((LogicUpContext)_localctx).t1.tipus != 'E' || ((LogicUpContext)_localctx).t1.tipus != 'R') && (((LogicUpContext)_localctx).t2.tipus != 'E' || ((LogicUpContext)_localctx).t2.tipus != 'R')&& (((LogicUpContext)_localctx).t2.tipus != 'E' || ((LogicUpContext)_localctx).t2.tipus != 'E')&& (((LogicUpContext)_localctx).t2.tipus != 'R' || ((LogicUpContext)_localctx).t2.tipus != 'R')){
 					                //nomes es pot usar en reals i enters, aixi que si son diferents ferem casting a real.
 					                    error = true;
-					                    System.out.println("Error de tipus detectat a la linia " + (((LogicUpContext)_localctx).s!=null?((LogicUpContext)_localctx).s.getLine():0) + ": El tipus del comparador lògic no casen");
+					                    System.out.println("Error de tipus detectat a la linia " + (((LogicUpContext)_localctx).s!=null?((LogicUpContext)_localctx).s.getLine():0) + ": El tipus del comparador lògic no casen (cas2)");
+					                    break;
 					              }
 					              else{
-					                //placeholder per gen de codi
-					                //aqui hauriem de fer castings
 					                ((LogicUpContext)_localctx).trad = ((LogicUpContext)_localctx).t1.trad;
 					                if(((LogicUpContext)_localctx).t1.tipus=='E'){
 					                   _localctx.trad.add(x.I2F);
 					                }
-					                ((LogicUpContext)_localctx).trad = ((LogicUpContext)_localctx).t1.trad;
+					                _localctx.trad.addAll(((LogicUpContext)_localctx).t2.trad);
 					                if(((LogicUpContext)_localctx).t2.tipus=='E'){
 					                   _localctx.trad.add(x.I2F);
 					                }
-
-					                if((((LogicUpContext)_localctx).s!=null?((LogicUpContext)_localctx).s.getText():null).equals("==") || (((LogicUpContext)_localctx).s!=null?((LogicUpContext)_localctx).s.getText():null).equals("!=")){
-					                    if((((LogicUpContext)_localctx).s!=null?((LogicUpContext)_localctx).s.getText():null).equals("==")){
-					                        _localctx.trad.add(x.IFEQ);
-					                    }
-					                    else{//(((LogicUpContext)_localctx).s!=null?((LogicUpContext)_localctx).s.getText():null).equals("!=")
-					                        _localctx.trad.add(x.IFNE);
-					                    }
+					                _localctx.trad.add(x.FCMPG);
+					                switch((((LogicUpContext)_localctx).s!=null?((LogicUpContext)_localctx).s.getText():null)){
+					                    case ">":
+					                        _localctx.trad.add(x.IFGT);
+					                        break;
+					                    case "<":
+					                        _localctx.trad.add(x.IFLT);
+					                        break;
+					                    case "<=":
+					                        _localctx.trad.add(x.IFLE);
+					                        break;
+					                    case ">=":
+					                        _localctx.trad.add(x.IFGE);
+					                        break;
 					                }
-					                else{
-					                    _localctx.trad.add(x.FCMPG);
-					                    switch((((LogicUpContext)_localctx).s!=null?((LogicUpContext)_localctx).s.getText():null)){
-					                        case ">":
-					                            _localctx.trad.add(x.IFLE);
-					                            break;
-					                        case "<":
-					                            _localctx.trad.add(x.IFGE);
-					                            break;
-					                        case "<=":
-					                            _localctx.trad.add(x.IFGT);
-					                            break;
-					                        case ">=":
-					                            _localctx.trad.add(x.IFLT);
-					                            break;
-					                    }
 					                }
 					                Long salt=8L;
 					                _localctx.trad.add(x.nByte(salt,2));
 					                _localctx.trad.add(x.nByte(salt,1));
 
 					                _localctx.trad.add(x.BIPUSH);
-					                _localctx.trad.add(new Long(1));
+					                _localctx.trad.add(new Long(0));
 
 					                _localctx.trad.add(x.GOTO);
 					                salt=5L;
@@ -3544,9 +3578,8 @@ public class gramParser extends Parser {
 					                _localctx.trad.add(x.nByte(salt,1));
 
 					                _localctx.trad.add(x.BIPUSH);
-					                _localctx.trad.add(new Long(0));
+					                _localctx.trad.add(new Long(1));
 
-					              }
 					          
 					}
 					}
@@ -3648,7 +3681,7 @@ public class gramParser extends Parser {
 					((SumContext)_localctx).t2 = mult();
 
 					        ((SumContext)_localctx).trad =  ((SumContext)_localctx).t1.trad;
-					          if((((SumContext)_localctx).t1.tipus == 'E' || ((SumContext)_localctx).t1.tipus == 'R') && (((SumContext)_localctx).t2.tipus == 'R' || ((SumContext)_localctx).t2.tipus == 'E')){
+					          if((((SumContext)_localctx).t1.tipus == 'E' || ((SumContext)_localctx).t1.tipus == 'R') && (((SumContext)_localctx).t2.tipus == 'R' || ((SumContext)_localctx).t2.tipus == 'E') && ((SumContext)_localctx).t1.tipus != ((SumContext)_localctx).t2.tipus){
 					              ((SumContext)_localctx).tipus =  'R';
 					          } else if(((SumContext)_localctx).t1.tipus == ((SumContext)_localctx).t2.tipus && (((SumContext)_localctx).t1.tipus == 'E' || ((SumContext)_localctx).t1.tipus == 'R')){
 					              ((SumContext)_localctx).tipus =  ((SumContext)_localctx).t1.tipus;
@@ -3668,7 +3701,6 @@ public class gramParser extends Parser {
 					                    if ((((SumContext)_localctx).s!=null?((SumContext)_localctx).s.getText():null).equals("+")) _localctx.trad.add(x.FADD);
 					                    else _localctx.trad.add(x.FSUB);
 					              }
-
 					          }
 					    
 					}
@@ -3783,13 +3815,13 @@ public class gramParser extends Parser {
 					                ((MultContext)_localctx).tipus =  'E';
 					          } else if ((((MultContext)_localctx).s!=null?((MultContext)_localctx).s.getText():null).equals("/") && (((MultContext)_localctx).t1.tipus == 'E' || ((MultContext)_localctx).t1.tipus == 'R') && (((MultContext)_localctx).t2.tipus == 'E' || ((MultContext)_localctx).t2.tipus == 'R')) {
 					                ((MultContext)_localctx).tipus =  'R';
-					          } else if ((((MultContext)_localctx).s!=null?((MultContext)_localctx).s.getText():null).equals("*") && (((MultContext)_localctx).t1.tipus == 'E' || ((MultContext)_localctx).t1.tipus == 'R') && (((MultContext)_localctx).t2.tipus == 'E' || ((MultContext)_localctx).t2.tipus == 'R')) {
+					          } else if ((((MultContext)_localctx).s!=null?((MultContext)_localctx).s.getText():null).equals("*") && (((MultContext)_localctx).t1.tipus == 'E' || ((MultContext)_localctx).t1.tipus == 'R') && (((MultContext)_localctx).t2.tipus == 'E' || ((MultContext)_localctx).t2.tipus == 'R') && ((MultContext)_localctx).t1.tipus != ((MultContext)_localctx).t2.tipus) {
 					                ((MultContext)_localctx).tipus =  'R';
 					          } else if ((((MultContext)_localctx).s!=null?((MultContext)_localctx).s.getText():null).equals("*") && ((MultContext)_localctx).t1.tipus == ((MultContext)_localctx).t2.tipus && (((MultContext)_localctx).t1.tipus == 'E' || ((MultContext)_localctx).t2.tipus == 'R')) {
 					                ((MultContext)_localctx).tipus =  ((MultContext)_localctx).t1.tipus;
 					          } else {
 					                error = true;
-					                System.out.println("Error de tipus detectat a la linia " + (((MultContext)_localctx).s!=null?((MultContext)_localctx).s.getLine():0) + ": El tipus de " + (((MultContext)_localctx).s!=null?((MultContext)_localctx).s.getText():null) +" no casen");
+					                System.out.println("Error de tipus detectat a la linia " + (((MultContext)_localctx).s!=null?((MultContext)_localctx).s.getLine():0) + ": El tipus de l'operador " + (((MultContext)_localctx).s!=null?((MultContext)_localctx).s.getText():null) +" no casen");
 					          }
 					          if(!error){
 					                if((((MultContext)_localctx).s!=null?((MultContext)_localctx).s.getText():null).equals("%")){
@@ -3903,7 +3935,7 @@ public class gramParser extends Parser {
 
 				        ((NegContext)_localctx).tipus =  ((NegContext)_localctx).t.tipus;
 				        ((NegContext)_localctx).trad =  ((NegContext)_localctx).t.trad;
-				        if(((((NegContext)_localctx).s!=null?((NegContext)_localctx).s.getText():null).equals("~") && (((NegContext)_localctx).t.tipus != 'E' || ((NegContext)_localctx).t.tipus != 'R' )) || ((((NegContext)_localctx).s!=null?((NegContext)_localctx).s.getText():null).equals("no") && ((NegContext)_localctx).t.tipus != 'B')){
+				        if(((((NegContext)_localctx).s!=null?((NegContext)_localctx).s.getText():null).equals("~") && !(((NegContext)_localctx).t.tipus == 'E' || ((NegContext)_localctx).t.tipus == 'R' )) || ((((NegContext)_localctx).s!=null?((NegContext)_localctx).s.getText():null).equals("no") && ((NegContext)_localctx).t.tipus != 'B')){
 				              error = true;
 				              System.out.println("Error de tipus detectat a la linia " + (((NegContext)_localctx).s!=null?((NegContext)_localctx).s.getLine():0) + ": El tipus del unari és incorrecte");
 				        }
@@ -4037,7 +4069,6 @@ public class gramParser extends Parser {
 				                _localctx.trad.add(x.nByte(constTemp,2));
 				                _localctx.trad.add(x.nByte(constTemp,1));
 				            }
-
 				        }
 				        else{
 				            error = true;

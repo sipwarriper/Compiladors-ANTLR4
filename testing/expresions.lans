@@ -1,0 +1,18 @@
+tipus
+    ELTIPO : boolea;
+ftipus
+
+constants
+    real float := 1.0E3;
+fconstants
+
+programa prog
+    variables
+        ELTIPO hola;
+        enter adeu;
+        real flota;
+    fvariables
+    llegir(hola);
+    adeu := hola?fals:cert?3-(2+~4):2;
+    escriureln(adeu);
+fprograma

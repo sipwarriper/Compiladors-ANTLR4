@@ -1,4 +1,4 @@
-// Generated from /home/sipwarriper/IdeaProjects/ANTLR4-Compiladors/src/gram.g4 by ANTLR 4.7
+// Generated from /home/klanc/Projects/Uni/4t/Compiladors/Compiladors-ANTLR4/src/gram.g4 by ANTLR 4.7
 
     import java.io.*;
     import javafx.util.Pair;
